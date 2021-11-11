@@ -1,0 +1,117 @@
+1. AM -》 一个管家 -》
+
+Jobtracker（RM+AM）在主节点
+
+主节点就负责资源管理（所有计算框架的计算资源）
+
+
+RM 在主节点
+
+client：2个任务 -》2AM
+集群上面有多少个正在跑任务（application应用），（从节点）多少个AM
+
+应用（任务）----AM 一一对应的关系
+
+
+一个集群上可以跑多个应用，Hadoop1.0  + spark 35台
+
+
+jobtracker   10000任务 200 map 20 reduce
+
+RM怎么知道资源的： 
+1.提交任务，指定多少资源
+2.NodeManager通过心跳，回传NodeManger上的资源信息
+
+
+executors：
+num：代表进程的数量 
+memory：进程的内存数
+cores：cpu拆成细粒度的核 
+
+
+num*memory=总共的内存数量 -》 执行任务，5天数据，每天/3千万->500m
+
+2.5G -> 10G   5num 2G 任务提上去很快运行 1num 10G
+
+Hadoop1.0
+slot -》rar （cpu+内存） 铅笔盒（10个铅笔+2个橡皮）
+
+同学1:1个铅笔盒不够，需要两个   
+一个map处理所需要一个slot的内存和cpu不足  2个
+
+yarn：
+用一个袋子把所有的铅笔和橡皮装一起：
+同学1: Container ：10+5=15铅笔 3个橡皮
+
+
+df1 = spark.sql("")-》df2
+df3也要用到df1
+df1.cache = persist(memory) executor 60%
+unpersist
+
+map -> reduce shuffle 内存缓存区
+
+show，collectAsMap =》大于1G  OutOfMemory
+
+本来需要多少内存byte，只有多少内存 kmeans -》中心点数据
+
+
+RM Scheduler任务调度 + ApplicationManager（监控AppMaster，负责重启AM）：
+
+Scheduler：任务调度
+让资源可插拔，资源分配  [exe：6G][exe：6G][exe：6G]
+任务（MR,Spark）：
+FIFO ：排队形式 first in first out(先进先出)
+Faire公平调度：多个用户多个作业调度器，（资源池pool【上界，下界】）
+下界：任务能跑起来，但不一定能跑完
+
+mr： map1 -》map2，map3，reduce1， reduce2
+
+能力调度：（按级别先进先出）
+一级：FIFO
+二级：FIFO
+三级：FIFO
+
+监控 job 变成监控AM
+
+
+
+zookeeper主备切换：  a b a挂了-》b
+
+1.jobTracker为什么要拆分成两部分（RM+AM）？
+
+2.拆分依据？
+
+3.为什么只留下RM在主节点，把AM放到从节点？
+
+
+nm1= a1,b1,c1 JVM进程（在内存中解决）
+nm2 = a2,d2,h2 
+nm3 = a3,e3,h3 
+nm4 = f3+(a)
+
+df = a,f (f >> a)
+nm4 
+
+分布式 性能 < 单机（带宽限制）
+
+num-executors：1G 100
+10 * 10  1*100g
+
+最大熵 不确定的情况下，平均一下
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

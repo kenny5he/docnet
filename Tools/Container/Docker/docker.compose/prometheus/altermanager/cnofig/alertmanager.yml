@@ -1,0 +1,18 @@
+global:
+  smtp_smarthost: 'smtp.163.com:25'
+  smtp_from: 'yekun_he@163.com'
+  smtp_auth_username: 'yekun_he@163.com'
+  smtp_auth_password: 'he19950504'
+  smtp_require_tls: false
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 10m
+  receiver: live-monitoring
+
+receivers:
+  - name: 'live-monitoring'
+    email_configs:
+      - to: '923662064@qq.com'
