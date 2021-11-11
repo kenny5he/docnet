@@ -1,0 +1,1 @@
+Interceptor: https://www.baeldung.com/spring-rest-template-interceptor

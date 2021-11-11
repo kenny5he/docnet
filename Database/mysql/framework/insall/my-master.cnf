@@ -1,0 +1,124 @@
+#官方解答文档
+#https://mariadb.com/kb/en/library/xtradbinnodb-server-system-variables/#innodb_file_format
+
+[client]
+port = 13306
+socket = /opt/mariadb/mariadb.sock
+
+[mysqld]
+user = mariadb
+socket = /opt/mariadb/mariadb.sock
+pid-file = /opt/mariadb/mariadb.pid
+
+port = 13306
+basedir= /opt/mariadb
+datadir= /opt/mariadb/data
+tmpdir = /opt/mariadb/temp
+
+# 主从机器复制 function报错问题 blog:https://www.cnblogs.com/flying607/p/5576584.html
+log_bin_trust_function_creators = 1
+# mysql 数据库发生死锁时, 开启mysql错误日志记录死锁相关信息
+innodb_print_all_deadlocks= 1
+# 跳过外部锁定,用于多进程条件下为MyISAM数据表进行锁定
+skip-external-locking
+#禁止域名解析
+skip-name-resolve
+# serverA severB 事物隔离级别问题
+autocommit = 1
+# 限制 并发线程,防止宕机,当并发用户线程数量小于64，建议设置值为0，blog:https://www.cnblogs.com/xinysu/p/6439715.html
+innodb_thread_concurrency= 8
+innodb_defragment= 1
+character_set_server = utf8
+init_connect = 'SET NAMES utf8'
+init_connect = 'SET collation_connection = utf8_general_ci'
+# 从库关闭binlog
+log-bin= /opt/mariadb/logs/binlog
+#binlog-do-db= hive #需要复制的数据库名，如果复制多个数据库，重复设置这个选项即可
+#binlog-ignore-db= xxx #不需要复制的数据库苦命，如果复制多个数据库，重复设置这个选项即可
+binlog_format= ROW
+max_binlog_size= 256M
+expire_logs_days = 1
+# 二进制日志缓冲区吗，默认是32k,使用show global status like 'binlog_cache_%';查看Binlog_cache_disk_use/Binlog_cache_use值设定
+binlog_cache_size= 1M
+server-id= 1001
+
+# InnoDB #
+innodb_data_home_dir = /opt/mariadb/data
+innodb_data_file_path= ibdata1:100M:autoextend
+innodb_log_group_home_dir= /opt/mariadb/data
+innodb_log_file_size = 128M
+innodb_log_buffer_size = 8M
+innodb_buffer_pool_size= 12288M #51200M#10240M
+innodb_flush_method= O_DIRECT
+innodb_file_per_table= 1
+#innodb_file_format = barracuda #MariaDB 10.2.2默认为Barracuda，在MariaDB 10.3中已删除，因此无需设置此变量
+innodb_flush_log_at_trx_commit = 0
+
+# MyISAM #
+myisam-recover-options = BACKUP #缩写myisam_recover
+key_buffer_size = 256M
+table_open_cache  = 400
+myisam_sort_buffer_size = 1024M
+concurrent_insert = 2
+read_buffer_size = 8M
+read_rnd_buffer_size = 8M
+
+# CACHES AND LIMITS #
+query-cache-type = 0
+query-cache-size = 0
+open_files_limit = 65535
+innodb_open_files= 8192
+table_open_cache = 8192
+thread_cache_size= 200
+max_connections= 16384
+max_user_connections = 10000
+extra_max_connections= 100
+max_connect_errors = 5000
+
+# REPLICATION #
+read_only= 0 ### 从库设置为1
+event_scheduler= 1 ### 从库设置为0
+slave-net-timeout= 60
+slave-skip-errors= 1062
+slave_parallel_threads = 4
+wait_timeout = 3600
+interactive_timeout= 3600
+lock_wait_timeout= 600
+innodb_lock_wait_timeout = 600
+concurrent_insert= 2
+key_buffer_size= 256M
+max_allowed_packet = 64M
+sort_buffer_size = 2M
+read_buffer_size = 2M
+join_buffer_size = 2M
+read_rnd_buffer_size = 2M
+myisam_sort_buffer_size= 128M
+
+# LOGGING #
+log-error= /opt/mariadb/logs/db-error.log
+slow_query_log = 1
+long_query_time= 2
+# 开启记录没有使用索引的SQL语句
+log-queries-not-using-indexes = 1
+slow_query_log_file= /opt/mariadb/logs/db-slow.log
+log_slow_verbosity = query_plan,explain
+tmp_table_size = 96M
+max_heap_table_size= 96M
+bulk_insert_buffer_size= 64M
+group_concat_max_len = 102400
+
+[mysqldump]
+quick
+max_allowed_packet = 64M
+
+[mysql]
+no-auto-rehash
+
+[myisamchk]
+key_buffer_size = 64M
+sort_buffer_size = 1M
+read_buffer = 2M
+write_buffer = 2M
+
+[mysqlhotcopy]
+interactive-timeout

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  # https://hub.docker.com/_/nginx
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ~/workspace/docker/nginx/data/html:/usr/share/nginx/html
+      - ~/workspace/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ~/workspace/docker/nginx/conf/conf.d:/etc/nginx/conf.d
+      - ~/workspace/docker/nginx/logs/:/var/log/nginx
+    restart: always
+    container_name: nginx

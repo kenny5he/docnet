@@ -1,0 +1,9 @@
+version: '3'
+services:
+  httpd:
+    image: httpd
+    container_name: httpd
+    ports:
+      - "80:80"
+    volumes:
+      - ~/workspace/docker/apache/data/:/usr/local/apache2/htdocs/

@@ -1,0 +1,7 @@
+version: '2.0'
+services:
+  kibana:
+    image: kibana:5.4.3
+    environment:
+      SERVER_NAME: kibana.example.org
+      ELASTICSEARCH_URL: http://elasticsearch.example.org

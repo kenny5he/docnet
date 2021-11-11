@@ -1,0 +1,7 @@
+#blog: https://www.cnblogs.com/yiwangzhibujian/p/7137546.html
+
+
+
+
+kibana:
+    default Index pattern: logstash-*

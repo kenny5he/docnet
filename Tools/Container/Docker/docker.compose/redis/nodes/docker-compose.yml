@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  redis-master:
+    image: redis
+    container_name: redis-master
+    command: redis-server --requirepass rdsdmt.123
+    sysctls:
+      - net.core.somaxconn=1024
+    ports:
+      - "63791:6379"
+    networks:
+      sentinel-master:
+        ipv4_address: 172.20.0.10
+        aliases:
+          - redis-master
+  redis-slave1:
+    image: redis
+    container_name: redis-slave1
+    sysctls:
+      - net.core.somaxconn=1024
+    ports:
+      - "63792:6379"
+    # requirepass 为主机密码，masterauth为从机连接主机密码
+    command: redis-server --slaveof redis-master 6379 --requirepass rdsdmt.123 --masterauth rdsdmt.123
+    depends_on:
+      - redis-master
+    networks:
+      sentinel-master:
+        ipv4_address: 172.20.0.20
+        aliases:
+          - redis-slave1
+  redis-slave2:
+    image: redis
+    container_name: redis-slave2
+    sysctls:
+      - net.core.somaxconn=1024
+    ports:
+      - "63793:6379"
+    command: redis-server --slaveof redis-master 6379 --requirepass rdsdmt.123 --masterauth rdsdmt.123
+    depends_on:
+      - redis-master
+    networks:
+      sentinel-master:
+        ipv4_address: 172.20.0.30
+        aliases:
+          - redis-slave2
+networks:
+  sentinel-master:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24

@@ -1,0 +1,36 @@
+#doc: https://docs.docker.com/compose/
+#blog: https://segmentfault.com/a/1190000006907443
+compose script:
+    #docker-compose.yml 目录运行命令:
+        COMPOSE_PROJECT_NAME=zk_test docker-compose up
+    #查看启动的zookeeper容器
+        docker-compose ps
+
+    docker exec -it zoo1 /bin/bash
+    docker exec -it zoo2 /bin/bash
+    docker exec -it zoo3 /bin/bash
+
+    bin/zkServer.sh status
+
+
+    #连接校验
+     docker run -it --rm \
+        --link zoo1:zk1 \
+        --link zoo2:zk2 \
+        --link zoo3:zk3 \
+        --net zookeeper_zoo \
+        zookeeper zkCli.sh -server zk1:2181,zk2:2181,zk3:2181
+
+
+docker-compose stop container       停止容器
+docker-compose start container      启动容器
+docker-compose logs  container      查看容器的日志
+docker-compose logs -f container    查看的实时日志
+docker-compose config  -q           验证（docker-compose.yml）文件配置，当配置正确时，不输出任何内容，当文件配置错误，输出错误信息。
+docker-compose up -d container      构建建启动nignx容器
+docker-compose exec container bash  登录到容器中
+docker-compose down                 删除所有容器,镜像
+docker-compose ps                   显示所有容器
+docker-compose restart container    重新启动容器
+docker-compose build container      构建镜像
+

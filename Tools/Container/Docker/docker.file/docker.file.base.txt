@@ -1,0 +1,115 @@
+# This dockerfile uses the debian image 
+# VERSION 2 - EDITION 1
+# Author: hwx308613
+# Command formart: Instruction [arguments / command] ...
+# Other 基于debian内核系统创建一个nginx的镜像
+
+# Base image to use, this must be set as the first line
+FROM debian:jessie
+
+# Maintainer Information
+MAINTAINER NGINX Docker Maintainers "hz13100337320@gmail.com"
+ENV NGINX_VERSION 1.10.1-1~jessie
+
+RUN apt-keu adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
+	&& echo 'deb http://nginx.org/packages/debian/ jessie nginx' >> /etc/apt/sources.list \
+	&& apt-get update \
+	&& apt-get install --no-install-recommends --no-install-suggests -y \
+	ca-certificates \
+	nginx=${NGINX_VERSION} \
+	nginx-module-xslt \
+	nginx-module-geoip \
+	nginx-module-image-filter \
+	nginx-module-perl \
+	nginx-module-njs \
+	gettext-base \
+	&& rm -rf /var/lib/apt/lists/*
+
+# forword request and error logs to docker log collector
+RUN ln -sf /deb/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
+
+EXPOSE 80 443
+CMD ["nginx", "-g", "deamon off;"]	
+
+
+
+
+# docker file Command（docer file 指令）
+#  	1.FROM (指定所创建的基础镜像，如果过本地不存在，则默认到Docker Hub下载)
+#  		1.指令: FROM <image>  或  FROM <image>:<tag>   或  FROM <image>@<digest>
+#  	2.MAINTAINER (指定维护者信息，该信息会写入镜像的Author属性中)
+#  	3.RUN (运行指定命令)
+#		1.指令: RUN <command>  或  RUN ["executable",  "param1", "param2"]
+#		2.例:  ["/bin/bash", "-c","echo hello"]
+#  	4.CMD (指定启动容器时默认执行的命令)
+#		1.指令: 
+#			CMD ["executable","param1","param2"] 使用exec执行时推荐使用的方式
+#			CMD command param1 param2 在bin/sh中执行，提供需要交互的应用
+#			CMD ["param1","param2"] 提供给ENTRYPOINT的默认参数
+#  	5.LABEL (指定生成镜像的元数据标签信息)
+#		1.指令: LABEL <key>=<value> <key>=<value> <key>=<value>...
+#		例：
+#			LABEL version="1.0"
+#			LABEL description="xxxx"
+#  	6.EXPOSE (声明镜像内服务所监听的端口)
+#		1.指令: EXPOSE <port> [<port>...]
+#  	7.ENV (指定环境变量，在镜像生成过程中会后续RUN指令使用)
+#		1.指令: ENV <key> <value> 或 ENV<key>=<value>
+#		2.例	: (指定的环境变量可在运行时覆盖，例：docker run --env <key>=<value> built_image)
+#			ENV PG_MAJOR 9.3
+#			ENV PG_VERSION 9.3.4
+#			RUN curl -SL http://exaple.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress && ...
+#			ENV PATH /url/local/postgress-$PG_MAJOR/bin:$PATH
+#  	8.ADD (将复制指定的src路径下的内容到容器中的<dest>路径下)
+#		1.指令: ADD <src> <dest>
+#		2.例	: ADD *.c /code/
+#  	9.COPY (复制本地主机的<src>下的内容到镜像中<dest>下)
+#		1.指令: COPY <src> <dest>
+#		2.例	: 
+#  	10.ENTRYPOINT (指定镜像的默认入口命令，该入口命令会在启动容器是作为根命令执行，所有传入值作为该命令的参数)
+#		1.指令: 
+#			ENTRYPOINT ["executable","param1","param2"] (exec调用执行)
+#			ENTRYPOINT command param1 param2
+#		2.例	: 
+#  	11.VOLUME (创建一个数据卷挂载点)
+#		1.指令: VOLUME ["/data"]
+#		2.例	: 
+#  	12.USER (指定运行容器时的用户名或UID，后续RUN等指令也会使用指定的用户身份)
+#		1.指令: USER deamon
+#		2.例	: 
+#  	13.WORKDIR (为后续RUN/CMD/ENTRYPOINT指定配置工作目录)
+#		1.指令: WORKDIR /path/to/workdir
+#		2.例	: workdir /opt/jdk
+#  	14.ARG (指定一下镜像内使用的参数(例如版本好信息等)，这些参数在执行docker build命令时才以 --build-arg<varname>=<value>格式导入)
+#		1.指令: ARG<name>[=<default value>]    通过docker build --build-arg <name>=<value>赋值
+#		2.例	: 
+#  	15.ONBUILD (配置当所创建的镜像作为其他镜像的基础镜像时，所执行的创建操作指令)
+#		1.指令: ONBUILD [INSTRUCTION]
+#		2.例: 
+#			ONBUILD ADD . /app/src
+#			ONBUILD RUN /usr/local/bin/pyton-build --dir /app/src
+#  	16.STOPSIGNAL (指定所创建镜像启动的容器接收退出信号值)
+#		1.指令: STOPSIGNAL signal
+#  	17.HEALTHCHECK (配置所启动容器如何进行健康检查(如何判断健康与否) (支持Docker 1.12后版本))
+#		1.指令: 
+#			HEALTHCHECK [OPTIONS] CMD command 根据所执行命令返回值是否为0判断
+#				OPTION选项：
+#					--interval=DURATION 过多久检查一次(默认30s)
+#					--timeout=DURATION 每次检查等待结果超时时间(默认30s)
+#					--retries=N 如果失败了，重试几次才最终确定失败(默认3次)
+#			HEALTHCHECK NONE 禁止基础镜像的健康检查
+#		2.例	: 
+#  	18.SHELL (指定其它命令使用shell是的默认shell类型)
+#		1.指令: SHELL ["executable","parameters"] 默认值为["/bin/sh","-c"]
+#		2.例	: 
+#
+#创建镜像
+# 	指令: docker build [选项]
+		-t 指定生成镜像的标签信息
+		-f 指定Dockerfile路径
+#	例：docker build -t build_repo/first_image /tmp/docker_builder
+#
+# 
+# 
+

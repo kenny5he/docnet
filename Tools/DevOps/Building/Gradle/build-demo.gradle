@@ -1,0 +1,98 @@
+apply plugin: 'java'
+
+version = '0.1'
+
+/**
+ * repositories 为一个方法
+ * mavenCentral 调用闭包
+ */
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url ''
+    }
+}
+
+/**
+ * dependencies 为一个方法
+ *
+ */
+dependencies {
+    complie 'commons-codec:commons-codec:1.6'
+    complie 'ch.qos.logback:logback-classic'
+    complie('org.hibernate:hibernate-core:3.6.3-Final') {
+        // 排除包
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+        // transitive = false
+    }
+}
+
+
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    repositories {
+        mavenCentral();
+    }
+    dependencies {
+
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+// settings.gradle文件的作用
+// 管理多模块项目
+include 'project-1'
+include 'project-2'
+
+
+// 构建Task
+def createDir = {
+    path ->
+        File dir = new File(path)
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+}
+
+task markJavaDir() {
+    def paths = ['src/main/java/', 'src/main/test/']
+    doFirst {
+        paths.forEach(createDir)
+    }
+}
+
+task markWebDir() {
+    // 依赖执行
+    dependsOn 'markJavaDir'
+    def paths = ['src/main/webapp/']
+    doLast {
+        paths.forEach(createDir)
+    }
+}
+
+// 解决版本冲突
+configurations.all {
+    resolveStrategy {
+        // 版本冲突 主动确认
+        failOnVersionConflict()
+        // 强制指定版本
+        force 'org.slf4j:slf4j-api:1.7.24'
+    }
+}
+
+
+
+
+
+
+
+
+

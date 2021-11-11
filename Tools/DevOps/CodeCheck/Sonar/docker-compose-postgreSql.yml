@@ -1,0 +1,40 @@
+version: '3.5'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: codecheck_postgre
+    ports:
+      - 5482:5432
+    volumes:
+      - ~/workspace/docker/codecheck/postgresql/:/var/lib/postgresql
+      - ~/workspace/docker/codecheck/postgresql/data:/var/lib/postgresql/data
+    environment:
+      TZ: Asia/Shanghai
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: iRfQ5v#vFXR%U4p9
+      POSTGRES_DB: sonar
+    networks:
+      - sonar-network
+  sonar:
+    image: sonarqube
+    restart: always
+    container_name: sonarqube
+    depends_on:
+      - postgres
+    volumes:
+      - ~/workspace/docker/codecheck/sonarqube/extensions:/opt/sonarqube/extensions
+      - ~/workspace/docker/codecheck/sonarqube/logs:/opt/sonarqube/logs
+      - ~/workspace/docker/codecheck/sonarqube/data:/opt/sonarqube/data
+      - ~/workspace/docker/codecheck/sonarqube/conf:/opt/sonarqube/conf
+    ports:
+      - 16900:9000
+    environment:
+      SONARQUBE_JDBC_USERNAME: sonar
+      SONARQUBE_JDBC_PASSWORD: iRfQ5v#vFXR%U4p9
+      SONARQUBE_JDBC_URL: jdbc:postgresql://postgres:5432/sonar
+    networks:
+      - sonar-network
+networks:
+  sonar-network:
+    driver: bridge

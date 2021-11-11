@@ -1,0 +1,12 @@
+version: '2'
+services:
+  activemq:
+    hostname: activemq
+    image: webcenter/activemq
+    ports:
+      - 61617:61616
+      - 8162:8161
+    restart: always
+    volumes:
+      - ~/workspace/docker/jms-exmpale/data:/data/activemq
+      - ~/workspace/docker/jms-exmpale/log:/var/log/activemq

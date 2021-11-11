@@ -1,0 +1,9 @@
+blog: https://www.cnblogs.com/jay763190097/p/10292227.html
+
+Kafka Compose 配置 PLAINTEXT://192.168.0.6:9092 的IP为宿主机的IP
+
+
+docker exec -it kafka1 /bin/bash
+
+
+http://localhost:9002/

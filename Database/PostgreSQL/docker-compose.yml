@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  postgres:
+    image: postgres
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_DB: example
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dmt.123
+    ports:
+      - 5432:5432
+    volumes:
+      - /Users/apaye/workspace/docker/postgres/exapmle/data:/var/lib/postgresql/data

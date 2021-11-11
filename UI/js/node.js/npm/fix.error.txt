@@ -1,0 +1,23 @@
+question 1:
+    npm WARN bootstrap@4.1.1 requires a peer of jquery@1.9.1 - 3 but none is installed. You must install peer dependencies yourself.
+fix :
+    npm install jquery@1.9.1 --save
+
+
+question 2:
+fix :
+
+question 3:
+fix :
+
+question 4:
+fix :
+
+question 5:
+fix :
+
+question 6:
+fix :
+
+question 7:
+fix :

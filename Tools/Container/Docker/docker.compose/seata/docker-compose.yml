@@ -1,0 +1,13 @@
+version: '3'
+services:
+  nacosdefault:
+    container_name: nacosdefault
+    environment:
+      MYSQL_ROOT_PASSWORD: "nac0s.admin"
+    image: mysql:laset
+    restart: unless-stopped
+    volumes:
+      - "/Users/apaye/workspace/docker/mysql/seata/default/data:/var/lib/mysql"
+      - "/Users/apaye/workspace/docker/mysql/seata/default/conf/my.cnf:/etc/my.cnf"
+    ports:
+      - "13316:3306"

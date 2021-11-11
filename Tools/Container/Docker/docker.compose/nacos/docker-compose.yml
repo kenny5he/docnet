@@ -1,0 +1,23 @@
+version: '3'
+services:
+  nacosmysql:
+    container_name: nacosmysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "nac0s.admin"
+    image: mysql:5.7
+    restart: unless-stopped
+    volumes:
+      - "/Users/apaye/workspace/docker/mysql/nacos/default/data:/var/lib/mysql"
+      - "/Users/apaye/workspace/docker/mysql/nacos/default/conf/my.cnf:/etc/my.cnf"
+    ports:
+      - "13316:3306"
+  nacosdefault:
+    container_name: nacosdstandalone
+    environment:
+      MYSQL_ROOT_PASSWORD: "nac0s.admin"
+    image: nacos/nacos-server
+    restart: unless-stopped
+    #volumes:
+    #  - "/Users/apaye/workspace/docker/nacos/standalone/conf:/config"
+    ports:
+      - "18848:8848"

@@ -1,0 +1,12 @@
+network.bind_host: 0.0.0.0
+cluster.name: elasticsearch_cluster
+node.name: node1
+node.master: true
+node.data: true
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+network.host: 0.0.0.0
+discovery.zen.minimum_master_nodes: 2
+discovery.zen.ping.unicast.hosts: ["es1","es2","es3"]
+#discovery.seed_hosts: ["172.19.0.10:9300", "172.19.0.20:9301","172.19.0.30:9302"]
+cluster.initial_master_nodes: ["node1"]

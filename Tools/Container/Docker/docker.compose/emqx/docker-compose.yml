@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  emqx:
+    image: emqx/emqx
+    restart: always
+    container_name: emqx
+    ports:
+      - 1883:1883
+      - 10881:8081
+      - 10883:8083
+      - 10884:8084
+      - 8883:8883
+      - 18083:18083
+    volumes:
+      - ~/workspace/docker/emqx/data:/opt/emqx/data

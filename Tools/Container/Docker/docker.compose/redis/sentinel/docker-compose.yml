@@ -1,0 +1,35 @@
+version: '2'
+services:
+  sentinel1:
+    image: redis
+    container_name: redis-sentinel1
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - "~/workspace/docker/redis/sentinel/node1/conf/sentinel.conf:/usr/local/etc/redis/sentinel.conf"
+    networks:
+      sentinel-master:
+        ipv4_address: 172.20.0.40
+        aliases:
+          - redis-sentinel1
+  sentinel2:
+    image: redis
+    container_name: redis-sentinel2
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - "~/workspace/docker/redis/sentinel/node2/conf/sentinel.conf:/usr/local/etc/redis/sentinel.conf"
+    networks:
+      sentinel-master:
+        ipv4_address: 172.20.0.50
+        aliases:
+          - redis-sentinel2
+  sentinel3:
+    image: redis
+    container_name: redis-sentinel3
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - "~/workspace/docker/redis/sentinel/node3/conf/sentinel.conf:/usr/local/etc/redis/sentinel.conf"
+    networks:
+      sentinel-master:
+        ipv4_address: 172.20.0.60
+        aliases:
+          - redis-sentinel3

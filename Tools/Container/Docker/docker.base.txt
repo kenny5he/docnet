@@ -1,0 +1,461 @@
+docker alibaba: https://blog.csdn.net/upshi/article/details/78988030
+docker alibaba hub: https://qaf7nybs.mirror.aliyuncs.com
+docker 版本:
+
+
+docker hub:
+    name: apaye
+    email: yekun_he@163.com
+    pwd:
+
+docker是基于LXC
+docker概念：（封装／分发／部署／运行 生命周期管理）
+	docker 三大核心：镜像／容器／仓库
+	镜像是创建Docker容器的基础
+	容器类似于轻量级的沙箱，用来运行和隔离应用
+	仓库是存放镜像文件的场所（公开仓库／私有仓库）
+	优势：更快速对交付和部署   更高效对资源利用    更轻松的迁移和扩展    更简单的更新管理
+docker的安装
+	linux yum安装
+		sudo tee /etc/yum.repos.d/docker/repo <<-'EOF'
+		sudo yum update
+		sudo yum install -y docker-engine
+	linux 脚本安装
+	    curl -fsSL https://get.docker.com/ | sh
+docker设置国内镜像源:
+    创建或修改 /etc/docker/daemon.json 文件
+    {
+        "registry-mirrors": [
+            "http://hub-mirror.c.163.com",
+            "http://registry.docker-cn.com"
+        ],
+        "insecure-registries": []
+    }
+
+docker镜像
+	获取镜像：docker pull NAME[:TAG]
+		-a,--all-tag=true|false 是否获取仓库所有镜像
+	查看镜像：docker images
+		-a,--all=true|false 列出所有镜像文件（包括临时文件），默认为否
+		--digests=true|false 列出镜像的数字摘要值，默认为否
+		-f,--filter=[] 过滤列出的镜像
+		-q,--quiet=true|false 输出ID信息，默认为否
+		man docker-images 查看docker命令参数文档
+	添加镜像标签(镜像文件相同，别名不同)：docker tag NAME:TAG NEWNAME:NEWTAG
+	查看镜像具体信息：docker inspect NAME[:TAG]
+	查看镜像历史：docker history NAME:[TAG]
+	搜寻镜像：docker search TERM
+		--automated=true|false 仅显示自动创建的镜像，默认为否
+		--no-trunc=true|false 输出信息不截断显示，默认为否
+		-s ,--stars=x 指定仅显示评价为指定星级以上的镜像，默认为0
+	删除镜像：
+		docker rmi IMAGE [IMAGE...] | docker rmi NAME:TAG  (删除镜像多个标签中的指定标签，并不影响镜像)
+		docker rmi ID (删除镜像标签，并删除镜像文件本身)(-f 强制删除)
+	创建镜像：(基于已有镜像的容器创建|基于本地模版导入|基于Dockerfile创建)
+		基于已有镜像的容器创建(基于正在运行的容器创建镜像)
+			docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+				-a,--author="" 作者信息
+				-c,--change=[] 提交时执行Dockerfile指令，包括CMD|ENTRYPOINT|ENV|EXPOSE|LABEL|ONBUILD|USER|VOLUME|WORDIR等
+				-m,--message="" 提交消息
+				-p,--pause=true 提交时暂停容器运行
+            例:
+                docker commit -m "my commit" -a "apaye" docmit docmit
+
+		基于本地模版导入
+			docker import [OPTIONS] file|URL|-[REPOSITORY[:TAG]]
+		使用Dockerfile创建镜像
+			Dockerfile 四个组成部分：基础镜像信息／维护者信息／镜像操作指令和容器启动时执行的指令
+			指定说明：
+				FROM IMAGE[:TAG] 指定所创建镜像的基础镜像
+				MAINTAINER NAME 指定维护者信息
+				RUN COMMAND 或 RUN ["executable","param1","param2"]运行命令
+				CMD ["executable","param1","param2"] 或 RUN COMMAND param1 param2 指定启动容器时默认执行的命令
+				LABEL KEY=VALUE KEY=VALUE ... 指定生成镜像的元数据标签信息	
+				EXPOSE PORT ...声明镜像内服务所监听的端口	
+				ENV KEY=VALUE指定环境变量
+				ADD SRC DEST 复制指定的<src>路径下的内容到镜像中到<dest>路径下，一般情况下推荐使用COPY，而不是ADD
+				ENATRYPOINT ["executable","param1","param2"] 或 ENATRYPOINT COMMAND param1 param2指定镜像到默认入口(指定默认运行的程序)
+				VOLUME ["/data"]创建数据卷挂载点
+				USER daemon 指定运行容器时的用户名或UID
+				WORKDIR /path/to/workdir 配置工作目录
+				ARG 指定镜像内使用的参数
+				ONBUILD 配置当所创建的镜像作为其他镜像的基础镜像时，所执行的创建操作命令
+				STOPSIGNAL 容器退出的信号值
+				HEALTHCHECK 如何进行健康检查
+				SHELL ["executable","parameters"]指定使用SHELL时的默认Shell类型
+			COPY与ADD的区别:
+			    ADD 会进行解压，如果从网络上下载文件时，不进行解压
+			ENV与ARG的区别:
+			    ARG可以支持构建时--build-arg <varname>=<value> 外部传入
+			CMD与ENATRYPOINT的区别:
+                ENATRYPOINT 指定默认执行的程序
+                CMD 可以被docker run命令参数覆盖，(例: docker run -it tomcat ls 此时被ls命令覆盖)
+                ENATRYPOINT/CMD 最后一个声明的有效
+            默认挂载目录:
+                /var/lib/docker/volumes/
+	存出和载入镜像	
+		存出镜像：docker save -o 镜像存放地址 源NAME:源TAG
+		载入镜像：docker load --input 镜像地址
+	上传镜像至仓库
+		docker push NAME[:TAG] | [REGISTRY_HOST[:REGISTRY_PORT]/]NAME[:TAG]	
+docker容器
+	创建容器：docker create
+	  Create命令与容器运行模式相关的选项
+		-a,--attach=[] 是否绑定到标准输入输出和错误
+		-d,--detach=true|false 是否在后台运行容器，默认为否
+		--detach-key="" 从attach模式退出快捷键
+		--entrypoint="" 镜像存在入口命令时，覆盖为新的命令
+		--expose=[] 指定容器会暴露出来的端口或端口范围
+		--group-add=[] 运行容器的用户组
+		-i,--interative=true|false 保持标准输入打开，默认为false
+		--ipc="" 容器IPC命名空间，可以为其它容器或主机
+		--isolation="default" 容器使用隔离机制
+		--log-driver="json-file" 指定容器的日志驱动类型，可以为json-file,syslog,journald,gelf,fluentd,awslogs,splunk,etwlogs,gcplogs或none
+		--log-opt=[] 传递给日志的驱离机制
+		--net="bridge" 指定容器的网络模式，包括bridge,none,其它容器内网络,host的网络或某个现有网络等
+		--net-alias=[] 容器在网络中的别名
+		--p,--publish-all=true|false 通过NAT机制将容器标记暴露的端口自动映射到本地主机的临时端口
+		-p,--publish=[] 指定如何映射到本地主机端口，例如 -p 11234-12234:1234-2234
+		--pid=host 容器到PID命名空间
+		--userns=""启用userns-remap时配置用户命名空间的模式
+		--uts=host 容器UTS命名空间
+		--restart="no" 容器的重启策略，包括no/on-failure[:max-retry]/always/unless-stopped等
+		--rm=true|false 容器退出后是否自动删除，不能跟-d同时使用
+		-t,--tty=true|false 是否分配一个伪终端，默认为false
+		--tmpfs=[] 挂载临时文件系统到容器
+		-v|--volume=[=[[HOST-DIR:]CONTAINER-DIR[:OPTIONS]]] 挂载主机上到文件卷到容器内
+		--volume-driver="" 挂载文件卷到驱动类型
+		--volumes-from=[] 从其他容器挂载卷
+		-w,--workdir="" 容器内的默认工作目录
+	  Create命令与容器环境和配置相关的选项
+	  	--add-host=[] 在容器内添加一个主机名到IP地址到映射关系（通过/etc/hosts文件）
+	  	--divice=[] 映射物理机上到设备到容器内
+	  	--dns-search=[] DNS搜索域
+	  	--dns-opt=[] 自定义的DNS选项
+	  	--dns=[] 自定义的DNS服务器
+	  	-e,--env=[] 指定容器内的环境变量
+	  	--env-file=[] 从文件中读取环境变量到容器内
+	  	-h,--hostname="" 指定容器内到主机名
+	  	--ip="" 指定容器到IPv4地址
+	  	--ip6="" 指定容器到IPv6地址
+	  	--link=[<name or id>:alias] 链接到其它容器
+	  	--mac-address="" 指定容器到Mac地址
+	  	--name="" 指定容器到别名
+	  Create命令与容器资源限制和安全保护相关到选项
+	  	--blkio-weight=10~1000 容器读写块设备等I/O性能权重，默认为0
+	  	--blkio-weight-device=[DEVICE_NAME:WEIGHT] 指定各个块设备等I/O性能权重
+	  	--cpu-shares=0 允许容器使用CPU资源等相对权重，默认一个容器能用满一个核等CPU
+	  	--cap-add=[] 增加容器的Linux指定的安全能力
+	  	--cap-drop=[] 移除容器的Linux指定的安全能力
+	  	--cgroup-parent="" 容器cgroups限制的创建路径
+	  	--cidfile="" 指定容器的进程ID号写到文件
+	  	--cpu-period=0 限制容器在CFS调度器下的CPU占用时间片
+	  	--cpuset-cpu="" 限制容器能使用哪些CPU核心
+	  	--cpuset-mems="" NUMA架构下使用哪些核心内存
+	  	--cpu-quota=0 限制容器在CFS调度器下的CPU配额
+	  	--device-read-bps=[] 挂载设备的读吞吐率（以bps为单位）限制
+	  	--device-write-bps=[] 挂载设备的写吞吐率（以bps为单位）限制
+	  	--device-read-iops=[] 挂载设备的读吞吐率（以每秒i/o次数为单位）限制
+	  	--device-write-iops=[] 挂载设备的写吞吐率（以每秒i/o次数为单位）限制
+	  	--kernel-memory="" 限制容器使用内核的内存大小，单位可以是b/k/m或g
+	  	-m,--memory="" 限制容器内应用使用的内存，单位可以是b/k/m或g
+	  	--memory-reservation="" 当系统中内存过低时，容器会被强制限制内存给定值，默认情况下等于内存限制值
+	  	--memory-swap="LIMIT" 限制容器使用内存和交换区的总大小
+	  	--oom-kill-disable=true|false 内存耗尽时是否杀死容器
+	  	--oom-score-adj="" 调整容器的内存耗尽参数
+	  	--pids-limit="" 限制容器的pid个数
+	  	--privileged=true|false 是否给容器以高权限，这意味着容器内应用将不受权限限制
+	  	--read-only=true|false 是否让容器内的文件系统只读
+	  	--security-opt=[] 指定一些安全参数，包括权限／安全能力／apparmor等
+	  	--stop-signal=SIGTERM 指定停止容器的系统信号
+	  	--shm-size="" ／dev/shm的大小
+	  	--sig-proxy=true|false 是否代理收到的信号给应用，默认为true，不能代理SIGCHLD／SIGSTOP和SIGKILL信号
+	  	--memory-swappiness="0~100" 调整容器的内存交换区参数
+	  	-u,--user="" 指定在容器内执行命令的用户信息
+	  	--ulimit=[] 通过ulimit来限制最大文件数，最大进程数等
+	  其它重要的选项
+	  	-l,--lable=[] 以键值对的方式指定容器的标签信息
+	  	--label-file=[] 从文件中读取标签信息
+	启动容器：docker start CONTAINERID
+	新建并启动容器：docker run 
+		检查本地是否存在指定镜像，不存在就从公库下载
+		利用镜像创建一个容器，并启动该容器
+		分配一个文件系统给容器，并在只读的镜像层外面挂载一层可读写层
+		从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中
+		从网桥的地址池配置一个IP地址给容器
+		执行用户指定的应用程序
+		执行完毕后容器被自动终止
+		-t 分配一个伪终端，并绑定到容器的标准输入上
+		-i 让容器标准输入保持打开
+		-d 守护状态运行
+	查看容器输出信息：docker logs CONTAINERID	
+	终止容器：docker stop [-t|--time[=10]] [CONTAINRE...]
+	进入容器：
+		docker attach [--detach-keys[=[]]] [--no-stdin] [--sig-proxy[=true]] CONTAINER
+			--detach-keys[=[]] 指定退出attach模式的快捷键序列，默认是CTRL-p CTRL-q
+			--no-stdin=true|false 是否关闭标准输入，默认是保持打开
+			--sig-proxy=true|false 是否代理收到系统信号给应用进程，默认为true
+		docker exec [-d|--detach] [--detach-keys[=[]]] [-i|--interactive] [--privileged] [-t|--tty] [-u|--user[=USER]] CONTAINER COMMAND [ARG...]
+			-i,--interactive=true|false 打开标准输入接受用户输入命令，默认为false
+			--privileged=true|false 是否给执行命令以最高权限，默认为false
+			-t,--tty=true|false 分配伪终端，默认为false
+			-u,--user=""	 执行命令的用户名或ID
+			例：
+				docker exec -it 243c32535da7 /bin/bash
+		nsenter工具
+			安装
+				cd /tmp; curl https://www.kernel.org/pub/linux/utils/util-linux/v2.24/util-linux-2.24.tar.gz | tar -zxf-; cd util-linux-2.24;
+				./configure --without-ncurses
+				make nsenter && cp nsenter /usr/local/bin
+			获取容器进程PID
+				PID=${docker inspect --format "{{ .state.Pid }}" <container>}		
+			通过PID连接容器
+				nsenter --target $PID --mount --uts --ipc --net --pid
+	删除容器：docker rm [-f|force] [-l|--link] [-v|--volumes] CONTAINER [CONTAINER...]
+		-f,--force=false 是否强行终止并删除一个运行中的容器
+		-l,--link=false 删除容器的连接，但保留容器
+		-v,--volumes=false 删除容器挂载的数据卷			
+	导出容器：docker export [-o|--output[=""]] CONTAINER
+		-o 指定导出tar文件名	
+	导入容器：docker import [-c|--change[=[]]] [-m|--message[=MESSAGE]] file|URL|-[REPOSITORY[:TAG]]
+	退出容器：Ctrl+d or exit	
+	查看运行中的容器：docker ps	  	
+docker仓库
+	搭建本地私有仓库
+		docker run -d -p 5000:5000 registry -v /opt/data/registry:/tmp/registry registry
+		-v 指定镜像文件存放本地路径
+		监听端口为5000(前一个5000为机器真实端口，后一个5000为容器内部端口)
+	
+Doker数据管理
+	数据卷
+		 在容器内创建一个数据卷(-v 参数创建数据卷 -p 将容器服务暴露的端口，自动映射到本地主机的临时端口)
+		 	使用training／webapp镜像创建一个web容器，并创建一个数据卷挂载到容器到／webapp目录
+		 	docker run -d -p --name web -v /webapp training/webapp python app.py
+		 挂载一个主机目录作为数据卷
+		 	加载主机到/src/webapp目录到容器的/opt/webapp目录
+		 	docker run -d -p --name web -v /src/webapp:/opt/webapp training/webapp python app.py
+		 挂载一个本地主机文件作为数据卷
+		    从主机单个文件到容器中作为数据卷
+		 	docker run --rm -it -v ~/.bash_history:/.bash_history ubuntu /bin/bash
+	数据卷容器
+		创建一个数据卷容器dbdata，并在其中创建一个数据卷挂载到/dbdata
+		dokcer run -it -v /dbdata --name dbdata ubuntu	 	
+		其它容器使用--volumes-from来挂载dbdata容器中的数据卷，db1 db2 挂载同一个数据卷到相同目录，三个容器任何一方写入，其它容器都能看到
+		docker run -it --volumes-from dbdata --name db1 ubuntu
+		docker run -it --volumes-from dbdata --name db2 ubuntu
+	利用数据卷容器来迁移数据
+		备份
+			docker run --volumes-from dbdata -v $(pwd):/backup --name worker ubuntu tar cvf /backup/backup.tar /dbdata
+		恢复
+			docker run -v /dbdata --name dbdata2 ubuntu /bin/bash
+			dcoker run --volumes-from dbdata2 -v $(pwd):/backup busybox tar xvf /backup/backup.tar
+		
+端口映射与容器关联
+	端口映射实现访问容器
+		从外部访问容器应用
+			-P 或 -p参数指定映射端口，未指定时随机映射一个49000～49900的端口到内部容器开放的网络端口
+			docker run -d -p training/webapp python app.py
+			docker ps -l
+		映射所有接口地址
+			将本地的5000端口映射到容器的5000端口
+			docker run -d -p 5000:5000 training/webapp python app.py
+		映射到指定地址的指定端口	
+			docker run -d -p 127.0.0.1:5000:5000 training/webapp python app.py
+		映射到指定地址到任意端口
+			docker run -d -p 127.0.0.1:5000 training/webapp python app.py
+		查看映射端口配置
+			docker port CONTAINER PORT
+	互联机制实现便捷互访
+		自定义容器命名
+			docker run -d -p --name web training/webapp python app.py
+		使用docker inspect 查看容器具体信息
+			docker inspect -f "{{ .Name}}" CONTIANER		
+		容器互联
+			创建一个新到数据库容器
+			docker run -d --name db training/postgres
+			创建web容器，并将它连接到db容器
+			docker run -d -P --name web --link db:db training/webapp python app.py
+				--link name:alias name是连接容器名称 alias 是连接别名
+	docker network(blog: http://blog.csdn.net/gezhonglei2007/article/details/51627821)				
+			
+实战
+	操作系统
+		Ubuntu
+			docker search -s 10 ubuntu 搜索被收藏10次以上的镜像
+			docker run -it ubuntu:14.04 /bin/bash 运行ubuntu系统，并登录bash
+			lsb_release -a 查看ubuntu发行版本号
+			apt-get update 更新仓库
+			apt-get install curl -y 安装curl工具
+		Centos
+			docker search -f stars=25 centos 搜索标星至少为25的CentOS相关镜像
+			docker run -it centos bash 运行centos系统，并登录bash
+			cat /etc/redhat-release 查看系统版本发行号
+	为镜像添加SSH服务	
+		docker run -it ubuntu:14.04 /bin/bash 启动ubuntu系统
+		apt-get update;apt-get install openssh-server -y 安装ssh软件
+		mkdir -p /var/run/sshd 创建sshd文件夹
+		/usr/sbin/sshd -D & 启动ssh服务
+		netstat -tunlp  查看容器端口
+		sed -ri 's/session   required   pam_loginuid.so/#session   required   pam_loginuid.so/g' /etc/pam.d/sshd
+		mkdir root/.ssh 创建ssh文件夹
+		ssh-keygen -t rsa 生成rsa加密密钥
+		vi /run.sh
+			run.sh内容如下
+			#!bin/bash
+			/usr/sbin/sshd -D		
+		chmod +x run.sh;exit;授予执行权限并退出容器
+		docker commit fcl sshd:ubuntu 生成新镜像
+	Web服务与应用
+		Apache
+			编写Dockerfile文件
+			FROM httpd:2.4 使用官方提供httpd的Apache镜像作为基础Web服务镜像
+			COPY ./public-html /usr/local/apache2/htdocs
+			mkdir ./public-html 创建项目目录
+			vi ./public-html/index.html 创建index.html文件
+				<!DOCTYPE html>
+				<html>
+					<body>
+						<p>Hello Docker!</p>
+					</body>
+				</html>
+			docker build -t apache2-image
+			docker run -it --rm --name apache-container -p 80:80 apache2-image	
+		Nginx(代理配置：https://blog.csdn.net/ygm_linux/article/details/53870265)
+			docker run -d -p 80:80 --name webserver nginx
+			
+			docker run --name nginxserver \
+			 -v ~/workspace/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro \
+			 -v ~/workspace/nginx/conf/conf.d:/etc/nginx/conf.d \
+			 -d -p 80:80 \
+			 nginx
+
+			静态资源 复杂配置
+			docker run \
+			  --name nginxstaticserver \
+			  -d -p 80:80 \
+			  -v /home/docker/workspace/nginx/html:/usr/share/nginx/html \
+			  -v /home/docker/workspace/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro \
+			  -v /home/docker/workspace/nginx/conf/conf.d:/etc/nginx/conf.d \
+			  nginx
+			
+		Tomcat
+		
+		Jenkins(持续集成 CI／CD)
+			docker run -p 8181:8080 -p 5000:5000 jenkins	
+			pwd:8229f2620808457891edc23a2044cd0a	 	name:apaye	admin/chmmw5jQ
+		Gitlab
+			docker run --detach \
+			--hostname gitlab.microfoolish.com \
+			--publish 443:443 --publish 10080:80 --publish 23:23 \
+			--name gitlab --restart always \
+			--volume /home/docker/workspace/gitlab/config:/etc/gitlab \
+			--volume /home/docker/workspace/gitlab/logs:/var/log/gitlab \
+			--volume /home/docker/workspace/gitlab/data:/var/opt/gitlab \
+			gitlab/gitlab-ce:latest
+			
+			默认用户: root 设置密码: heyekun54
+	数据库应用
+		Mysql
+			docker run --name hi-mysql -e MYSQL_ROOT_PASSWORD=dmt.123 -d mysql:latest
+			例1：创建并运行最新版mysql容器，映射端口3306,密码为dmt.123，数据挂载在本地磁盘/Users/apaye/workspace/docker/mysql/data/目录,mysql配置为/Users/apaye/workspace/docker/mysql目录下的my.cnf文件
+				docker run -d -p 13306:3306 --name hive -e MYSQL_ROOT_PASSWORD=dmt.123
+				-v /Users/apaye/workspace/docker/mysql/hive/data:/var/lib/mysql 
+				-v /Users/apaye/workspace/docker/mysql/hive/conf:/etc/mysql/conf.d mysql:latest
+		    例2:
+		        cas SSO登录
+		        docker run -d -p 23306:3306 --name cas -e MYSQL_ROOT_PASSWORD=LafjYBdBb%z -v /Users/apaye/workspace/docker/mysql/cas/data:/var/lib/mysql -v /Users/apaye/workspace/docker/mysql/cas/conf:/etc/mysql/conf.d mysql:5.7
+		    例3:
+		        apollo
+                docker run -d -p 33306:3306 --name apollo \
+                    -e MYSQL_ROOT_PASSWORD=dmt.123 \
+                    -v /Users/apaye/workspace/docker/mysql/apollo/data/:/var/lib/mysql \
+                    -v /Users/apaye/workspace/docker/mysql/apollo/conf/:/etc/mysql/conf.d \
+                    -v /Users/apaye/workspace/docker/mysql/apollo/logs/:/logs \
+                    mysql:5.7
+
+            例4:
+                pagehelper
+                docker run -d -p 53306:3306 --name pagehelper \
+                    -e MYSQL_ROOT_PASSWORD=dmt.123 \
+                    -v /Users/apaye/workspace/docker/mysql/pagehelper/data/:/var/lib/mysql \
+                    -v /Users/apaye/workspace/docker/mysql/pagehelper/conf/:/etc/mysql/conf.d \
+                    -v /Users/apaye/workspace/docker/mysql/pagehelper/logs/:/logs \
+                    mysql:5.7
+            例5:
+                example
+                docker run -d -p 43306:3306 --name example \
+                    -e MYSQL_ROOT_PASSWORD=dmt.123 \
+                    -v /Users/apaye/workspace/docker/mysql/example/data/:/var/lib/mysql \
+                    -v /Users/apaye/workspace/docker/mysql/example/conf/:/etc/mysql/conf.d \
+                    -v /Users/apaye/workspace/docker/mysql/example/logs/:/logs \
+                    mysql:5.7
+
+		MongoDB
+			docker run --name mongo -d -p 27017:27017 mongo
+			docker exec -it CONTAINERID sh 进入容器内部，启用shell控制台
+			env 查看环境变量配置
+			连接官方镜像
+				docker run -it --link mongo:db alpine sh
+				ping db 测试联通性
+				docker run -it --link mongo:db --entrypoint mongo mongo --host db 使用mongo cli 指令连接数据库
+			设置账号密码:db.createUser({user:"root",pwd:"mgdb.123",roles:[{role:"userAdminAnyDatabase",db:"admin"}]})
+			mongodb默认使用test库，必须使用use 切换
+			使用root验证:db.auth("root","mgdb.123");	
+		Redis
+			docker run --name redis -d redis
+			docker exec -it CONTAINERID sh 进入容器内部，启用shell命令
+			env 查看环境变量
+			连接redis 容器
+				docker run -it --link redis-container:db alpine sh
+				ping db 测试连通性
+				nc db 6379 检测redis服务可用性
+				docker run -it --link redis-container:db --entrypoint redis-cli redis -h db 使用redis客户端连接
+		Memcached
+			docker run --name memcached-container -d memcached memcached -m 64
+	分布式处理与大数据平台
+		RabbitMQ
+			docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:33f28f6290e05375363ee661151170d37fbc89ada004c3235f02997b711b4cb2b
+		Hadoop
+			docker run -it sequenceiq/hadoop-docker:2.7.0 /etc/bootstrap.sh -bash 使用官方镜像
+			cat /usr/local/hadoop/logs/hadoop-root-namenode-xxxxxxx.out 查看配置信息和执行操作
+			cd $HADOOP_PREFIXbash-4.1# pwd/usr/local/hadoop 验证Hadoop环境
+			bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.0.jar grep input output 'dfs[a-z.]+' 通过内置程序验证
+			bin/hdfs dfs -cat output/*  使用hdfs指令检验结果
+		Spark
+			docker pull sequenceiq/saprk:1.6.0  使用docker pull指令获取镜像
+			docker build --rm -t sequenceiq/spark:1.6.0 . 构建spark镜像
+			docker run -it -p 8088:8088 -p 8042:8042 -h sandbox sequenceiq/spark:1.6.0 bash 运行容器并映射端口
+			cat /usr/local/hadoop/logs/hadoop-root-namenod-sandbox.out 查看namenode日志信息
+			YARN客户端模式(运行Spark shell)
+				spark-shell \
+				--master yarn-client \
+				--executor-memory 1g \
+				--excutor-cores 1
+			PI计算(YARN集群模式)
+				spark-submit \
+				--class org.apache.spark.examples.SparkPi \
+				--files $SPARK_HOME/conf/metrics.properties \
+				--master yarn-cluster \
+				--driver-memory 1g \
+				--executor-memory 1g \
+				--executor-cores 1 \
+				$SPARK_HOME/lib/spark-examples-1.6.0-hadoop2.6.0.jar
+			PI计算(YARN客户端模式)
+				spark-submit \
+				--class org.apache.spark.examples.SparkPi \
+				--master yarn-client \
+				--driver-memory 1g \
+				--executor-memory 1g \
+				--executor-cores 1 \
+				$SPARK_HOME/lib/spark-examples-1.6.0-hadoop2.6.0.jar
+			export YARN_CONF_DIR="*`pwd`/yarn-remote-client"	配置远程访问
+			export HADOOP_USER_NAME=root 
+		Elasticsearch
+			docker 配置数据卷，默认暴露两个端口,9200端口对外提供服务API，9300端口是内部通信端口
+			docker run -d -v "$PWD/config":/usr/share/elasticsearch/config -v "$PWD/esdata":/usr/share/elasticsearch/data elasticsearch
+		    docker run -d --name elasticsearch-sky -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch
+        EMQTT:
+            docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx
+	
+		
+		

@@ -1,0 +1,25 @@
+npm官方文档: https://docs.npmjs.com/cli/profile
+
+1.npm install  安装依赖
+    -g 全局安装
+    --save 安装完成后，将依赖保存至package.json中
+        -P,--save-prod: dependencies
+        -D,--save-dev: devDependencies
+        -O,--save-optional: optionalDependencies
+        --no-save: 不保存至dependencies
+    i 检测与node版本最匹配的npm包，并匹配相互依赖的npm包应该提升的版本号
+
+
+2.npm uninstall 卸载
+    npm uninstall -g @angular/cli  --全局卸载angular/cli
+
+3.npm cache 缓存
+    npm cache verify --清理缓存
+
+
+4. npm 发布包至npm仓库
+    0. 参考地址Blog: https://blog.csdn.net/weixin_37861326/article/details/80052680
+    1. 将package.json中的private属性修改为false
+    2. npm login
+    3. npm adduser
+    4. npm publish

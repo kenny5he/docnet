@@ -1,0 +1,6 @@
+1.
+    error message:
+        https://registry-1.docker.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+    resolve:
+        add
+2.

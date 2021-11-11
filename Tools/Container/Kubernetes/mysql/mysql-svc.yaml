@@ -1,0 +1,20 @@
+apiVersion: v1
+# 表明是Kubernetes Service
+kind: Service
+metadata:
+#全局唯一名称
+  name: mysql-svc
+  labels:
+    name: mysql-svc
+spec:
+  type: NodePort
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+      name: http
+# 服务映射端口
+      nodePort: 33306
+  selector:
+# Service 对应的Pod拥有这里定义的标签
+    name: mysql-pod

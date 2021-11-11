@@ -1,0 +1,44 @@
+version: '3.5'
+services:
+  elasticsearch:
+    image: elasticsearch:7.8.0
+    container_name: elasticsearch-sky
+    restart: always
+    ports:
+      - 19280:9200
+    environment:
+      discovery.type: single-node
+      TZ: Asia/Shanghai
+      ES_JAVA_OPTS: -Xms256m -Xmx256m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ~/workspace/docker/skywalking/data-es:/usr/share/elasticsearch/data
+  oap:
+    image: apache/skywalking-oap-server:8.5.0-es7
+    container_name: skywalking-oap
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    restart: always
+    ports:
+      - 11800:11800
+      - 12800:12800
+    environment:
+      SW_STORAGE: elasticsearch
+      SW_STORAGE_ES_CLUSTER_NODES: elasticsearch:9200
+  ui:
+    image: apache/skywalking-ui:8.5.0
+    container_name: skywalking-ui
+    depends_on:
+      - oap
+    links:
+      - oap
+    restart: always
+    ports:
+      - 18088:8080
+    environment:
+      SW_OAP_ADDRESS: oap:12800

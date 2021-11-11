@@ -1,0 +1,82 @@
+version: '3.7'
+services:
+  mysqlmaster:
+    container_name: mysqlmaster
+    environment:
+      MYSQL_ROOT_PASSWORD: "dmt.123"
+    image: mysql:latest
+    restart: unless-stopped
+    volumes:
+      - "/Users/apaye/workspace/docker/mysql/framework/master/data:/var/lib/mysql"
+      - "/Users/apaye/workspace/docker/mysql/framework/master/conf:/etc/mysql/conf.d"
+    ports:
+      - "33061:3306"
+    hostname: mysqlmaster
+    networks:
+      mysqlnet:
+        ipv4_address: 172.18.0.10
+        aliases:
+          - mysqlmaster
+  mysqlslave1:
+    container_name: mysqlslave1
+    environment:
+      MYSQL_ROOT_PASSWORD: "dmt.123"
+    image: mysql:latest
+    restart: unless-stopped
+    volumes:
+      - "/Users/apaye/workspace/docker/mysql/framework/slave1/data:/var/lib/mysql"
+      - "/Users/apaye/workspace/docker/mysql/framework/slave1/conf:/etc/mysql/conf.d"
+    ports:
+      - "33062:3306"
+    hostname: mysqlslave1
+    networks:
+      mysqlnet:
+        ipv4_address: 172.18.0.20
+        aliases:
+          - mysqlslave1
+  mysqlslave2:
+    container_name: mysqlslave2
+    environment:
+      MYSQL_ROOT_PASSWORD: "dmt.123"
+    image: mysql:latest
+    restart: unless-stopped
+    volumes:
+      - "/Users/apaye/workspace/docker/mysql/framework/slave2/data:/var/lib/mysql"
+      - "/Users/apaye/workspace/docker/mysql/framework/slave2/conf:/etc/mysql/conf.d"
+    ports:
+      - "33063:3306"
+    hostname: mysqlslave2
+    networks:
+      mysqlnet:
+        ipv4_address: 172.18.0.30
+        aliases:
+          - mysqlslave2
+  mysqlmycat:
+    container_name: mysqlmycat
+    image: qiyue/mycat:1.6.5
+    volumes:
+      - "/Users/apaye/workspace/docker/mysql/mycat/conf:/mycat/conf/:ro"
+      - "/Users/apaye/workspace/docker/mysql/mycat/logs:/mycat/logs/:rw"
+    ports:
+      - "18066:8066"
+      - "19066:9066"
+    links:
+      - mysqlmaster
+      - mysqlslave1
+      - mysqlslave2
+    networks:
+      mysqlnet:
+        ipv4_address: 172.18.0.40
+        aliases:
+          - mysqlmycat
+    ulimits:
+      nproc: 65535
+    hostname: mysqlmycat
+    restart: always
+networks:
+  mysqlnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/24

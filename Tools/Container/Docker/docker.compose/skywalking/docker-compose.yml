@@ -1,0 +1,65 @@
+version: '3.5'
+services:
+  elasticsearch6:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.1
+    container_name: elasticsearch6
+    restart: always
+    ports:
+      - 19280:9200
+    environment:
+      discovery.type: single-node
+      TZ: Asia/Shanghai
+      ES_JAVA_OPTS: -Xms256m -Xmx256m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ~/workspace/docker/skywalking/data-es6:/usr/share/elasticsearch/data
+  elasticsearch-kibana:
+    image: kibana:6.8.1
+    container_name: kibana
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://elasticsearch6:9200
+      ELASTICSEARCH_URL: http://elasticsearch6:9200
+    ports:
+      - 15600:5601
+    depends_on:
+      - elasticsearch6
+    links:
+      - elasticsearch6
+  oap:
+    image: skywalking/oap
+    container_name: oap
+    depends_on:
+      - elasticsearch6
+    links:
+      - elasticsearch6
+    restart: always
+    ports:
+      - 11800:11800
+      - 12800:12800
+    environment:
+      SW_STORAGE: elasticsearch
+      SW_STORAGE_ES_CLUSTER_NODES: elasticsearch6:9200
+      SW_HEALTH_CHECKER: default
+      SW_TELEMETRY: prometheus
+    healthcheck:
+      test: ["CMD", "./bin/swctl", "ch"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  ui:
+    image: skywalking/ui
+    container_name: ui
+    depends_on:
+      - oap
+    links:
+      - oap
+    restart: always
+    ports:
+      - 28082:8080
+    environment:
+      SW_OAP_ADDRESS: oap:12800

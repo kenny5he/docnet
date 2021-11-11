@@ -1,0 +1,110 @@
+version: '3.7'
+services:
+  #https://juejin.im/post/5ba4c8976fb9a05cec4da9f5
+  es1:
+    image: elasticsearch:7.3.2
+    container_name: es1
+    volumes:
+      - ~/workspace/docker/elasticsearch/node1/data:/usr/share/elasticsearch/data
+      - ~/workspace/docker/elasticsearch/plugins/v7.3.2:/usr/share/elasticsearch/plugins
+    #  - ~/workspace/docker/elasticsearch/node1/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - node.name=es1
+      - cluster.name=es-cluster
+      - discovery.seed_hosts=es2,es3
+      - node.max_local_storage_nodes=256
+      - node.data=true
+      - cluster.initial_master_nodes=es1,es2,es3
+      - bootstrap.memory_lock=true
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - cluster.join.timeout=180s
+      - cluster.publish.timeout=180s
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    networks:
+      - es-network
+  es2:
+    image: elasticsearch:7.3.2
+    container_name: es2
+    volumes:
+      - ~/workspace/docker/elasticsearch/node2/data:/usr/share/elasticsearch/data
+      - ~/workspace/docker/elasticsearch/plugins/v7.3.2:/usr/share/elasticsearch/plugins
+    environment:
+      - node.name=es2
+      - cluster.name=es-cluster
+      - discovery.seed_hosts=es1,es3
+      - node.max_local_storage_nodes=256
+      - node.data=true
+      - cluster.initial_master_nodes=es1,es2,es3
+      - bootstrap.memory_lock=true
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - cluster.join.timeout=180s
+      - cluster.publish.timeout=180s
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    depends_on:
+      - es1
+    networks:
+      - es-network
+  es3:
+    image: elasticsearch:7.3.2
+    container_name: es3
+    volumes:
+      - ~/workspace/docker/elasticsearch/node3/data:/usr/share/elasticsearch/data
+      - ~/workspace/docker/elasticsearch/plugins/v7.3.2:/usr/share/elasticsearch/plugins
+    environment:
+      - node.name=es3
+      - cluster.name=es-cluster
+      - discovery.seed_hosts=es1,es2
+      - node.max_local_storage_nodes=256
+      - node.data=true
+      - cluster.initial_master_nodes=es1,es2,es3
+      - bootstrap.memory_lock=true
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - cluster.join.timeout=180s
+      - cluster.publish.timeout=180s
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    depends_on:
+      - es1
+    networks:
+      - es-network
+  #docker kibana api: https://www.elastic.co/guide/en/kibana/5.4/_configuring_kibana_on_docker.html
+  #docker kibaba api: https://www.cnblogs.com/nieqibest/p/9846790.html
+  elasticsearch-kibana:
+    image: kibana:7.3.2
+    container_name: kibana
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://es1:9200
+      ELASTICSEARCH_URL: http://es1:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - es1
+    networks:
+      - es-network
+networks:
+  es-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/24

@@ -1,0 +1,38 @@
+version: '3.5'
+services:
+  mysql:
+    container_name: codecheck_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=s0nar.Adm1n
+      - MYSQL_DATABASE=sonarqube
+    image: mysql:5.7
+    restart: unless-stopped
+    volumes:
+      - "~/workspace/docker/codecheck/mysql/data:/var/lib/mysql"
+      - "~/workspace/docker/codecheck/mysql/conf/my.cnf:/etc/my.cnf"
+    ports:
+      - "33116:3306"
+    networks:
+      - codecheck-network
+  sonar:
+    image: sonarqube
+    restart: always
+    container_name: sonarqube
+    depends_on:
+      - mysql
+    volumes:
+      - ~/workspace/docker/codecheck/sonarqube/extensions:/opt/sonarqube/extensions
+      - ~/workspace/docker/codecheck/sonarqube/logs:/opt/sonarqube/logs
+      - ~/workspace/docker/codecheck/sonarqube/data:/opt/sonarqube/data
+      - ~/workspace/docker/codecheck/sonarqube/conf:/opt/sonarqube/conf
+    ports:
+      - 19800:9000
+    environment:
+      SONARQUBE_JDBC_USERNAME: root
+      SONARQUBE_JDBC_PASSWORD: s0nar.Adm1n
+      SONARQUBE_JDBC_URL: jdbc:mysql://mysql:33116/sonarqube
+    networks:
+      - codecheck-network
+networks:
+  codecheck-network:
+    driver: bridge
