@@ -1,8 +1,0 @@
-1. 根据文件创建发布到Kubernetes集群
-kubectl create -f mysql-rc.yaml
-kubectl create -f mysql-svc.yaml
-2.查看集群rc信息
-kubectl get rc
-3.查看集群pod信息
-kubectl get pods
-kubectl get pods -l app=nginx

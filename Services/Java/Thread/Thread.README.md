@@ -14,6 +14,7 @@
     1. 常用方法:
         - currentThread: 返回代码段正在被哪个线程调用
         - isAlive: 判断线程是否处于活动状态,线程已启动且尚未终止，
+        - getState: 获取线程状态
         - sleep: 让当前正在执行的线程 休眠，暂停执行
         - getId: 取得线程唯一标识
     2. 停止线程方法:
@@ -23,9 +24,22 @@
     3. 判断线程是否停止状态:
         - interrupted: 测试当前线程是否已经中断，(测试当前线程是否已经是中断状态，执行后具有将状态标志置为false的功能)
         - isInterrupted: 测试线程是否已经中断，(测试线程Thread对象是否已经是中断状态，但不清除状态标志)
+    4. 线程优先级
+        - getPriority: 获取线程优先级
+        - setPriority: 设置线程优先级, 默认值为 5, 最大值为10
 3. 线程状态:
-	
-   
+   ![Java 线程状态](/Users/apaye/workspace/git/worknotes/docnet/Services/Java/Thread/imgs/Java.Thread.State.png)
+	1. 线程状态 (Thread.State 枚举类)
+        1. NEW (新建)
+        2. RUNNABLE (RUNNABLE: 运行、RUNNING: 运行中 、READY: 就绪)
+        3. BLOCKED (阻塞)
+        4. WAITING (无限等待)
+        5. TIMED WAITING (计时等待)
+        6. TERMINATED (终止)
+    
 ### 线程安全处理	
 
 ### 线程问题定位
+
+
+- 知乎: https://zhuanlan.zhihu.com/p/429951570

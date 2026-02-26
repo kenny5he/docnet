@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  postgres:
+    image: postgres
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_DB: framework
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dmt.123
+    ports:
+      - 54321:5432
+    volumes:
+      - /home/containerd/postgresql/login/data:/var/lib/postgresql/data

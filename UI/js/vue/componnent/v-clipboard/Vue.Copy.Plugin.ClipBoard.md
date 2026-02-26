@@ -1,4 +1,22 @@
-# Vue 复制/粘贴 功能插件
+# 粘贴板
+## 原生方式获取粘贴板内容 (navigator.clipboard)
+1. 可获取条件
+    1. localhost
+    2. https协议
+2. 写
+    ```javascript
+    document.addEventListener('copy', (e) => {
+        e.preventDefault();
+        navigator.clipboard.writeText('禁止复制，请先关注公众号 Kenny ')
+    })
+   ```
+3. 读
+    ```javascript
+    navigator.clipboard.readText().then((text) => {
+      
+    })
+   ```
+## Vue 复制/粘贴 功能插件
 1. 安装 v-clipboard 插件
 ```js
 npm install --save v-clipboard

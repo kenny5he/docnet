@@ -21,13 +21,14 @@ show variables like 'transaction_isolation'
 explain select user_id,user_name,user_account from tbl_user where user_id = 4212143; 
 ```
 
-### Mysql information_schema
+### information_schema
    
-| 表/视图 | 说明 |
+| 视图 | 说明 |
 | --- | --- |
 |information_schema.innodb_trx |当前运行的所有事务|
 |information_schema.innodb_locks |当前出现的锁|
 |information_schema.innodb_lock_waits |锁等待的对应关系|
+|information_schema.processlist|执行中的SQL|
 
 1. 查询时间较长的事务
 ```sql
@@ -43,3 +44,18 @@ where ilw.blocking_trx_id = it.trx_id;
  /* 杀掉线程 */
  kill #trx_mysql_thread_id
 ```
+3. 杀掉 执行超过30 查询任务
+```sql
+SELECT CONCAT('KILL ',ID,';') FROM INFORMATION_SCHEMA.PROCESSLIST WHERE  STATE='Sending data' AND TIME>30;
+```
+
+### Mysql 
+| 表/视图 | 说明 |
+| --- | --- |
+|mysql.proc |  |
+|mysql.plugin | |
+|mysql.func| |
+|mysql.event| |
+|mysql.user||
+|mysql.slow_log | 慢SQL 日志|
+|mysql.general_log||

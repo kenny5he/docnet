@@ -1,7 +1,6 @@
 # Nginx Config
 ## Nginx Config Tag
-#### Location
-
+### Locations
 
 ### Server
 

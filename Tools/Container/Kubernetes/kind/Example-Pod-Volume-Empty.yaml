@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jalova-pod
+spec:
+  containers:
+    - image: openjdk:8u282
+      name: jalova
+      volumeMounts:
+        - mountPath: /app
+          name: app-volume
+  volumes:
+    - name: app-volume
+      emptyDir: {}

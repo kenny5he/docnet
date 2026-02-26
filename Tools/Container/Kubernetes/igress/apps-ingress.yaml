@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apps-ingress
+  namespace: apps
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: manager
+      port:
+        number: 8080
+  rules:
+    - host: web-test.alphafashion.cn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: manager
+                port:
+                  number: 8080
+          - path: /business
+            pathType: Prefix
+            backend:
+              service:
+                name: business
+                port:
+                  number: 8080
+          - path: /oa
+            pathType: Prefix
+            backend:
+              service:
+                name: oa
+                port:
+                  number: 8080

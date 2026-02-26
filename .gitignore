@@ -10,7 +10,7 @@ target
 /**/gradle/wrapper
 /**/.factorypath
 /**/logs
-
+Machine Learning/**/*
 *.pdf
 *.docx
 *.tar.gz

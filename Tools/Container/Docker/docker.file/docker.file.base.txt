@@ -113,3 +113,4 @@ CMD ["nginx", "-g", "deamon off;"]
 # 
 # 
 
+# Docker file 指令学习参考:

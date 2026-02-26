@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oa
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oa
+      release: stabel
+  template:
+    metadata:
+      labels:
+        app: oa
+        release: stabel
+        env: test
+    spec:
+      containers:
+        - name: oa
+          image: daocloud.io/136542892/erp-base-image:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash", "/tmp/start.sh", "start"]
+          env:
+            - name: spring.profiles.active
+              value: test
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: applogs
+              mountPath: /tmp/logs
+            - name: appfile
+              mountPath: /tmp/files
+            - name: appbase
+              mountPath: /tmp/app
+            - name: timezone
+              mountPath: /etc/localtime:ro
+      imagePullSecrets:
+        - name: daocloud
+      volumes:
+        - name: applogs
+          hostPath:
+            path: "/home/alphafashion/datas/apps/oa/logs"
+        - name: appfile
+          hostPath:
+            path: "/home/alphafashion/datas/apps/oa/files"
+        - name: appbase
+          hostPath:
+            path: "/home/alphafashion/datas/apps/oa/app"
+        - name: timezone
+          hostPath:
+            path: "/etc/localtime"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oa
+  namespace: apps
+spec:
+  type: ClusterIP
+  selector:
+    app: oa
+    release: stabel
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

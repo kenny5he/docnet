@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  hashicorp-vault:
+    image: hashicorp/vault
+    container_name: hashicorp-vault
+    restart: always
+    ports:
+      - 18200:8200
+    environment:
+      VAULT_SERVER: "http://0.0.0.0:18200"
+      TOKEN: UMbtQ-j4UDO-jn0Kx-2IhQC
+    volumes:
+      - ~/workspace/docker/vault/hashicorp/data:/data
+      - ~/workspace/docker/vault/hashicorp/conf:/conf

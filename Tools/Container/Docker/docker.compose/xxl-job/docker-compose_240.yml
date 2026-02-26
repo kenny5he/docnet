@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  xxl-job-admin:
+    image: xuxueli/xxl-job-admin:2.4.0
+    container_name: xxl-job-admin
+    volumes:
+      - ~/workspace/docker/xxl-job/conf/application-240.properties:/application-240.properties
+    environment:
+      - spring.config.location=/application-240.properties
+    ports:
+      - "24080:8080"

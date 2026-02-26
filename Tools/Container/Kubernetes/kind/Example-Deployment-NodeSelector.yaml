@@ -1,0 +1,19 @@
+apiVersion: extensions/v1
+kind: Deployment
+metadata:
+  name: tomcat-deploy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tomcat-deploy
+    spec:
+      nodeSelector:
+        # 指定调度节点为带有label标记为：cloudnil.com/nodes=it105的node节点
+        alphafashion.com/nodes: it105
+      containers:
+        - name: tomcat
+          image: tomcat:8.0
+          ports:
+            - containerPort: 8080

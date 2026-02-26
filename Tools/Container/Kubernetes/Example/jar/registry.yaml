@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: daocloud-reg
+spec:
+  containers:
+    - name: daocloud-erp-container
+      image: daocloud.io/136542892/erp-base-image
+  imagePullSecrets:
+    - name: regcred

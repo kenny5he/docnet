@@ -1,7 +1,8 @@
 ###Lombok
 官方文档: https://projectlombok.org/features/all
 1. 作用: 提高代码整洁度
-2. 项目依赖、插件安装:
+2. 原理: 基于JSR 269: Pluggable Annotation Processing API实现，通过编译期自定义注解处理器来实现。
+3. 项目依赖、插件安装:
     1. Maven
         1. 依赖
             ```
@@ -35,7 +36,7 @@
         8. 重启Eclipse
     2.3 [IDEA插件](http://plugins.jetbrains.com/plugin/6317-lombok-plugin)
 
-3. 使用:
+4. 使用:
     1. @Getter/@Setter 自动生成get set方法
         ```
         public Class Person{

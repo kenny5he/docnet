@@ -9,6 +9,24 @@
 
 ## spring.factories
 - 实现与SPI类似
+  ```
+    public class ExampleSpringFacotries implement BeanClassLoaderAware {
+      private ClassLoader beanClassLoader;
+  
+      @Override
+      public void setBeanClassLoader(ClassLoader classLoader) {
+        this.beanClassLoader = classLoader;
+      }
+      
+      /**
+       * 加载类
+       */
+      protected List<IExampleHandler> loadHandlers() {
+        return SpringFactoriesLoader.loadFactories(IExampleHandler.class, this.beanClassLoader);
+      }
+      
+    }
+  ```
 - 实现:
     - spring-core包里定义了SpringFactoriesLoader类，这个类实现了检索META-INF/spring.factories文件，并获取指定接口的配置的功能,
     - loadFactories方法 根据接口类获取其实现类的实例，这个方法返回的是对象列表。

@@ -1,0 +1,23 @@
+apiVersion: extensions/v1
+kind: Deployment
+metadata:
+  name: tomcat-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: frontend
+    matchExpression:
+      - {key: tier, operator: In, values: [tomcat]}
+    template:
+      metadata:
+        labels:
+          app: tomcat-deploy
+          tier: tomcat
+      spec:
+        containers:
+          - name: tomcat-deploy
+            image: tomcat
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 8080

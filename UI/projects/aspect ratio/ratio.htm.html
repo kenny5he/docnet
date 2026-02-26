@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aspect Ratio</title>
+    <style>
+        .item {
+            background: #f40;
+            width: 50%;
+            margin: 0 auto;
+
+            /** 新css属性, 兼容性: chrome: > 88 **/
+            aspect-ratio: 4/3;
+        }
+
+        .inner {
+            width: 100%;
+            /** 绝对定位的元素，相对于填充盒，包含padding部分 **/
+            padding-top: 75%;
+            height: 0;
+            position: relative;
+        }
+        .container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0px;
+            top: 0px;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="item">
+        <!-- 兼容方案 -->
+        <div class="inner">
+            <div class="container"></div>
+        </div>
+    </div>
+</body>
+</html>

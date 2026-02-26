@@ -64,7 +64,7 @@
 			insert into Fruit values(3,'香蕉',2500,3500,2200,2500);
 			insert into Fruit values(4,'葡萄',1500,2500,1200,3500);
 		select id , name, jidu, xiaoshou from Fruit unpivot (xiaoshou for jidu in (q1, q2, q3, q4) );
-		--不使用unpivot的Sql方式
+        /** 2.1.2 列转行 union 方式 **/
 		select id, name ,'Q1' jidu, (select q1 from fruit where id=f.id) xiaoshou from Fruit f
 		union
 		select id, name ,'Q2' jidu, (select q2 from fruit where id=f.id) xiaoshou from Fruit f
@@ -72,3 +72,9 @@
 		select id, name ,'Q3' jidu, (select q3 from fruit where id=f.id) xiaoshou from Fruit f
 		union
 		select id, name ,'Q4' jidu, (select q4 from fruit where id=f.id) xiaoshou from Fruit f;
+
+/** 2. Select 查询条件 **/
+/** 2.1 查询特定范围的数据 (有效防止数据放大) **/
+select count(0)
+from student
+where (user_name,subject) in (('张三','语文'),('李四','数学'),('王五','英语'))

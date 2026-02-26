@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-svc
+  labels:
+    name: tomcat-svc
+spec:
+  # 外部机器可访问的端口, 节点机器端口
+  type: NodePort
+  # por 为服务之间访问的端口
+  ports:
+    - port: 8080
+      protocol: TCP
+      # 容器端口，与制作容器时暴露的端口一致
+      targetPort: 8080
+      name: http
+      nodePort: 33306
+  selector:
+    name: tomcat-pod

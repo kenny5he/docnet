@@ -54,7 +54,7 @@
     2. 注意: 此操作必须是在短时间内能获取到锁，不然会导致长时间线程空转。
 ## 锁的状态:
 1. 锁的状态种类
-    1.  无锁: 方法未加synchronized关键字、代码块未调用lock()方法
+    1. 无锁: 方法未加synchronized关键字、代码块未调用lock()方法
     2. 偏向锁
         1. 偏向锁、轻量级锁、重量级锁是指锁的状态，并且是针对Synchronized
         2. 偏向锁的作用？
@@ -70,7 +70,7 @@
             - 10次自旋
             - 等待cpu调度的线程数超过cpu核数的一半
 2. 锁膨胀的过程
-   ![image](Java.lock.status.webp "Lock ")
+   ![image](workspace/git/worknotes/docnet/Services/Java/Thread/Lock/imgs/Java.lock.status.webp)
 
 ## Java中锁的使用
 1. synchronized

@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: devops-nexus-pv
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.105
+    path: /home/alphafashion/datas
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devops-nexus-pvc
+  namespace: devops
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+---
+# Source: nexus-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: nexus3
+  name: nexus3
+  namespace: devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nexus3
+  template:
+    metadata:
+      labels:
+        name: nexus3
+      name: nexus3
+      namespace: devops
+    spec:
+      nodeSelector:
+        core: "4"
+      containers:
+        - name: nexus3
+          image: sonatype/nexus3:3.37.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+              name: web
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 540
+            periodSeconds: 30
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 540
+            periodSeconds: 30
+            failureThreshold: 6
+          resources:
+            limits:
+              cpu: 4000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: nexus-data
+              subPath: tools/nexus/
+              mountPath: /nexus-data
+      volumes:
+        - name: nexus-data
+          persistentVolumeClaim:
+            claimName: devops-nexus-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus3
+  namespace: devops
+  labels:
+    name: nexus3
+spec:
+  selector:
+    name: nexus3
+  type: NodePort
+  ports:
+    - name: web
+      port: 8081
+      targetPort: web
+      nodePort: 30081

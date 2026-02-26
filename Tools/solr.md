@@ -1,6 +1,6 @@
-安装solr7: http://blog.csdn.net/u014028634/article/details/78203558
-配置solr7: https://www.cnblogs.com/LUA123/p/7783102.html
-w3cSchool配置文档: https://www.w3cschool.cn/solr_doc/solr_doc-s4kg2fp6.html
+- 安装solr7: http://blog.csdn.net/u014028634/article/details/78203558
+- 配置solr7: https://www.cnblogs.com/LUA123/p/7783102.html
+- w3cSchool配置文档: https://www.w3cschool.cn/solr_doc/solr_doc-s4kg2fp6.html
 
 
 

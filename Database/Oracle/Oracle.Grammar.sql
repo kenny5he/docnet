@@ -262,15 +262,29 @@
 			/* STDDEV(x[DISTINCT|ALL]) 返回选择列表项中的标准偏差 */
 		
 		
-/** keep 分析函数 **/
+/** keep over 分析函数 **/
+    /** keep 指明后面的括号里是按照指定规则排名的top 1或bottom 1 **/
     select
        deptno,
        empno,
        ename,
        sal,
+       /**  **/
        max(ename) keep(dense_rank FIRST order by sal) over (partition by deptno) as min_sal_man,
+        /** 此条sql 含义为 按deptno 分区 获取 最小的 sal  **/
        max(sal) keep(dense_rank FIRST order by sal) over (partition by deptno) as min_sal,
+       /**  **/
        max(ename) keep(dense_rank LAST order by sal) over (partition by deptno) as max_sal_man,
+        /** 此条sql 含义为 按deptno 分区 获取 最大的 sal  **/
        max(sal) keep(dense_rank LAST order by sal) over (partition by deptno) as max_sal
     from emp
     where deptno=10
+
+/** Start with **/
+    /** 查询客户行业信息，通过行业 IND200000994 查询行业层级 **/
+    /** 问题点: 当前层级若不满足，则不存在结果集中，但不影响下一层级展示 **/
+    select
+        listagg(mci.industry_en_name,'/') within group(order by level desc) industry_en_name
+    from mdm.mdm_cdh_industry_info_t mci where mci.public_flag = 'Y' and mci.status = 'Active'
+    start with mci.industry_id = 'IND200000994' connect by mci.industry_id = PRIOR mci.parent_id
+    group by connect_by_root(mci.industry_en_name)

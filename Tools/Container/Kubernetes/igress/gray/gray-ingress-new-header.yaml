@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: canary-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # 启用Canary
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "Region"
+    # Header中包含Region且值为bj或gz的请求转发到Canary Ingress
+    nginx.ingress.kubernetes.io/canary-by-header-pattern: "bj|gz"
+    kubernetes.io/elb.port: '80'
+spec:
+  rules:
+    - host: gray.microfoolish.com
+      http:
+        paths:
+          - path: '/'
+            backend:
+              serviceName: new
+              servicePort: 80

@@ -1,5 +1,5 @@
 ### ElasticSearch
-[参考link](https://www.yuque.com/books/share/9f4576fb-9aa9-4965-abf3-b3a36433faa6#) ggmc
+1. [鲁班学院文档](https://www.yuque.com/books/share/9f4576fb-9aa9-4965-abf3-b3a36433faa6#) ggmc
 - elasticsearch相关概念、及关系:
     -特点:
         1. 不支持事务和复杂关系

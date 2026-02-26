@@ -24,13 +24,13 @@ docker的安装
 	    curl -fsSL https://get.docker.com/ | sh
 docker设置国内镜像源:
     创建或修改 /etc/docker/daemon.json 文件
-    {
-        "registry-mirrors": [
-            "http://hub-mirror.c.163.com",
-            "http://registry.docker-cn.com"
-        ],
-        "insecure-registries": []
-    }
+{
+    "registry-mirrors": [
+        "http://hub-mirror.c.163.com",
+        "http://registry.docker-cn.com"
+    ],
+    "insecure-registries": []
+}
 
 docker镜像
 	获取镜像：docker pull NAME[:TAG]
@@ -93,6 +93,8 @@ docker镜像
                 ENATRYPOINT/CMD 最后一个声明的有效
             默认挂载目录:
                 /var/lib/docker/volumes/
+            清除无效数据卷标
+                docker volume rm $(docker volume ls -qf dangling=true)
 	存出和载入镜像	
 		存出镜像：docker save -o 镜像存放地址 源NAME:源TAG
 		载入镜像：docker load --input 镜像地址

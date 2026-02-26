@@ -1,9 +1,14 @@
-JAVA 获取系统配置信息重点内容
-System.getProperty(“java.version”) // java版本号
-System.getProperty(“java.vendor”); // Java提供商名称
-System.getProperty(“java.vendor.url”); // Java提供商网站
-System.getProperty(“java.home”); // Java，哦，应该是jre目录
-System.getProperty(“java.vm.specification.version”); // Java虚拟机规范版本号
+### JAVA 获取系统配置信息重点内容
+1. java版本号
+System.getProperty(“java.version”);
+2. Java提供商名称
+System.getProperty(“java.vendor”);
+3. Java提供商网站
+System.getProperty(“java.vendor.url”);
+4. jdk/jre目录
+System.getProperty(“java.home”);
+5. Java虚拟机规范版本号
+System.getProperty(“java.vm.specification.version”);
 System.getProperty(“java.vm.specification.vendor”); // Java虚拟机规范提供商
 System.getProperty(“java.vm.specification.name”); // Java虚拟机规范名称
 System.getProperty(“java.vm.version”); // Java虚拟机版本号

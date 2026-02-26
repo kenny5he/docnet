@@ -46,11 +46,14 @@ BindingResult result = binder.getBindingResult();
 
 
 3. TypeConverter
+    
 
 4. ConfigurablePropertyAccessor
 
-5. ConversionService
-
+5. ConversionService (类型转换服务)
+    1. canConvert: 是否支持原类型到目标类型的转换，入参: 原始类型、目标类型。
+    2. convert: 将source实例转成目标类型，如果转换过程出错，抛出 ConversionException。
+    3. DefaultConversionService: 默认实现类
 
 ### DataBinder Web组件
 - WebDataBinder

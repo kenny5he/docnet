@@ -21,7 +21,9 @@
 1. Java序列化不支持跨平台
 
 ### [序列化漏洞](https://www.freebuf.com/vuls/170344.html)
+1. 漏洞利用工具: ysoserial.jar 
 
+- 参考: https://www.freebuf.com/articles/web/214096.html
 ### IDEA中设置类自动序列化
 Settings -> Editor -> Inspections -> Java -> Serialization -> Serializable .class without 
 

@@ -1,0 +1,16 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: apache
+  namespace: default
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    kind: Deployment
+    name: apache
+  targetCPUUtilizationPercentage: 90
+
+# Pod 横向自动扩容，与RC、Deployment一样，属于Kubernetes资源对象
+# 同效果命令
+# kubectl autoscale deployment apache --cpu-percent=90 --min=1 --max=10

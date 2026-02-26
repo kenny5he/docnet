@@ -21,11 +21,12 @@
         - 搜索平台(OpenSearch)
         - 站内信平台(WebSocket)
         - 工作流开发平台(Camunda BPM)
+        - 应用注册平台(Eureka/Zookeeper/Consul)
         - 配置平台(Nacos/Apollo)
         - 注册平台(Eureka/Zookeeper)
         - 日志平台(ELK)
         - 埋码平台(前端埋码、中台埋码)
-        - 数据同步平台(FDI)
+        - 数据同步平台(FDI/EDI)
     3. DevOps:
         1. Jekins x(Building + Deploy)
         2. Sonarqube (CodeCheck)

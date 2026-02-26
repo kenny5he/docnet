@@ -75,6 +75,8 @@ linux文件系统
     ```shell
         # 查看系统信息/系统版本
         cat /proc/redhat
+        # 查看OS信息
+        cat /etc/os-release
         # 查看cpu配置:
         cat /proc/cpuinfo
         # 查看内存情况: 

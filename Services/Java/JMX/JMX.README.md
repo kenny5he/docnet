@@ -4,5 +4,6 @@
 3. 场景应用: 应用场景为监控Java程序的基本信息和运行情况，任何Java程序都可以开启JMX，然后使用JConsole或Visual VM进行预览。
 4. 附录: 
     - 参考: https://www.jianshu.com/p/8c5133cab858
+    - 简书: https://www.jianshu.com/p/414647c1179e
     - 简书: https://www.jianshu.com/p/fa4e88f95631
     - Blog: https://honeypps.com/java/jmx-quick-start-1-standard-mbean/

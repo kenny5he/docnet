@@ -1,0 +1,2 @@
+astro_client_id: d7189a4a36784c48aaabd22b968ec660
+astro_client_secret: b2a79686f9611e957aba38da53138e2b276c2b7853fea208

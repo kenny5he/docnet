@@ -1,0 +1,12 @@
+version: "3"
+services:
+  nessus-scanner:
+    image: tenableofficial/nessus
+    ports:
+      - "18834:8834"
+    environment:
+      USERNAME: "microfoolish"
+      PASSWORD: "v&BLsWR+0ky0B&w2"
+      ACTIVATION_CODE: "977D-8Y73-N6Q6-NSV4-RFZN"
+    restart: always
+    container_name: nessus-scanner

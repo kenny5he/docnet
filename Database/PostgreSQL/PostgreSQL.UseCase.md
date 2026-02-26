@@ -15,3 +15,11 @@
 
 
 ## 数据同步、数据备份、数据恢复
+
+
+## 高级用法
+1. RLS (Row Level Security)
+    - 官方：https://www.postgresql.org/docs/current/ddl-rowsecurity.html
+
+2. 设置变量
+    - 官方: https://www.postgresql.org/docs/current/sql-set.html

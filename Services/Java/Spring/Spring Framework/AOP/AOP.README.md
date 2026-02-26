@@ -32,42 +32,42 @@
 
 - XML使用配置解释
 
-    |AOP配置元素	|               描述|
-    |---|---|
-    |aop:advisor|	            定义AOP通知器|
-    |aop:before|	            定义 AOP 前置通知|
-    |aop:after|	                定义AOP后置通知（不管被通知方法是否执行成功）|
-    |aop:after-returing|	    定义AOPafter-returing 通知|
-    |aop:after-throwing|	    定义AOPafter-throwing 通知|
-    |aop:around|	            定义AOP环绕通知|
-    |aop:aspect|	            定义切面|
-    |aop:aspectj-autoproxy|	    启动 @AspectJ 注解驱动的切面|
-    |aop:config|	            顶层的 AOP 配置元素，大多数 aop : * 元素必须包含在 元素内|
-    |aop:declare-parents|	    为被通知的对象引入额外接口，并透明的实现|
-    |aop:pointcut|	            定义切点|
+|AOP配置元素	|               描述|
+|---|---|
+|aop:advisor|	            定义AOP通知器|
+|aop:before|	            定义 AOP 前置通知|
+|aop:after|	                定义AOP后置通知（不管被通知方法是否执行成功）|
+|aop:after-returing|	    定义AOPafter-returing 通知|
+|aop:after-throwing|	    定义AOPafter-throwing 通知|
+|aop:around|	            定义AOP环绕通知|
+|aop:aspect|	            定义切面|
+|aop:aspectj-autoproxy|	    启动 @AspectJ 注解驱动的切面|
+|aop:config|	            顶层的 AOP 配置元素，大多数 aop : * 元素必须包含在 元素内|
+|aop:declare-parents|	    为被通知的对象引入额外接口，并透明的实现|
+|aop:pointcut|	            定义切点|
 
 - AspectJ
 
-    |AspectJ指示器|	        描述|
-    |---|---|
-    |arg()	                |限制连接点的指定参数为指定类型的执行方法|
-    |@args()	            |限制连接点匹配参数由指定注解标注的执行方法|
-    |execution()	        |用于匹配连接点的执行方法|
-    |this()                 |限制连接点匹配 AOP 代理的 Bean 引用为指定类型的类|
-    |target()	            |限制连接点匹配特定的执行对象，这些对象对应的类要具备指定类型注解|
-    |within()	            |限制连接点匹配指定类型|
-    |@within()	            |限制连接点匹配指定注释所标注的类型（当使用 Spring AOP 时，方法定义在由指定的注解所标注的类里）v
-    |@annotation	        |限制匹配带有指定注释的连接点|
-    
+| AspectJ指示器   |	        描述|
+|---| --- |
+| arg()	       |限制连接点的指定参数为指定类型的执行方法|
+| @args()	     |限制连接点匹配参数由指定注解标注的执行方法|
+| execution()	 |用于匹配连接点的执行方法|
+| this()       |限制连接点匹配 AOP 代理的 Bean 引用为指定类型的类|
+| target()	    |限制连接点匹配特定的执行对象，这些对象对应的类要具备指定类型注解|
+| within()	    |限制连接点匹配指定类型|
+| @within()	   |限制连接点匹配指定注释所标注的类型（当使用 Spring AOP 时，方法定义在由指定的注解所标注的类里）v
+| @annotation	 |限制匹配带有指定注释的连接点|
+
     
 ### 问题
 1. &lt;aop:aspect/&gt; 和&lt;aop:advisor/&gt;的区别？
-    0. Adivisor是一种特殊的Aspect，Advisor代表spring中的Aspect
-    1. 实现方式不同
+    1. Adivisor是一种特殊的Aspect，Advisor代表spring中的Aspect
+    2. 实现方式不同
         - &lt;aop:aspect&gt;定义切面时，只需要定义一般的bean就行，
         - &lt;aop:advisor&gt;中引用的通知时，通知必须实现MethodInterceptor接口
-    2. advisor只持有一个Pointcut和一个advice，而aspect可以多个pointcut和多个advice
-    3. aspect/advisor example
+    3. advisor只持有一个Pointcut和一个advice，而aspect可以多个pointcut和多个advice
+    4. aspect/advisor example
         ```
             <!-- blog: https://blog.csdn.net/weixin_41884446/article/details/102611813 -->
             <!--1、装配目标对象到ioc容器-->

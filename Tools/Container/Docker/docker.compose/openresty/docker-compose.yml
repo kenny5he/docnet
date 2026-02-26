@@ -1,0 +1,14 @@
+version: "3"
+services:
+  openresty:
+    image: openresty/openresty
+    ports:
+      - "80:80"
+    volumes:
+      - ~/workspace/docker/openresty/data/html:/usr/local/openresty/nginx/html
+      - ~/workspace/docker/openresty/lua-lib/:/usr/local/openresty/site/lualib
+      - ~/workspace/docker/openresty/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ~/workspace/docker/openresty/conf/conf.d:/etc/nginx/conf.d
+      - ~/workspace/docker/openresty/logs/:/usr/local/openresty/nginx/logs
+    restart: always
+    container_name: openresty

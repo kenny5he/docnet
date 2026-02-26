@@ -28,7 +28,7 @@
 	
 
 ## 部署流程、上线流程
-	GitLab 代码管理
-	Sonar 代码扫描
-	Jekins自动构建部署
+1. GitLab 代码管理
+2. Sonar 代码扫描
+3. Jekins自动构建部署
 	

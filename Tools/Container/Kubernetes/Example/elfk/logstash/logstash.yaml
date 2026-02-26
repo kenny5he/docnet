@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    log.mount.launch.status: '[]'
+    log.mount.policy.launcher: '[]'
+    meta.helm.sh/release-name: lsh-mcp-logstash
+    meta.helm.sh/release-namespace: default
+  generation: 1
+  labels:
+    app: lsh-mcp-logstash-lsh-mcp-logstash
+    app.kubernetes.io/managed-by: Helm
+    chart: lsh-mcp-logstash
+    heritage: Helm
+    release: lsh-mcp-logstash
+  name: lsh-mcp-logstash-lsh-mcp-logstash
+  namespace: default
+  resourceVersion: "2422055"
+  selfLink: /apis/apps/v1/namespaces/default/statefulsets/lsh-mcp-logstash-lsh-mcp-logstash
+  uid: bce7a7ce-9765-493c-b2b8-8fe2bfdbe0da
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: lsh-mcp-logstash-lsh-mcp-logstash
+      release: lsh-mcp-logstash
+  serviceName: lsh-mcp-logstash-lsh-mcp-logstash
+  template:
+    metadata:
+      annotations:
+        configchecksum: 4c78faf0f98fb6aa26019a156449fec2197a7b42cbfc7a666c879aadf4875a8
+        pipelinechecksum: 9ccfaf557f6835ce7ae626767421d6e50bcd859ffd08564f5271722bcc5f022
+      creationTimestamp: null
+      labels:
+        app: lsh-mcp-logstash-lsh-mcp-logstash
+        chart: lsh-mcp-logstash
+        heritage: Helm
+        release: lsh-mcp-logstash
+      name: lsh-mcp-logstash-lsh-mcp-logstash
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - lsh-mcp-logstash-lsh-mcp-logstash
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - env:
+            - name: LS_JAVA_OPTS
+              value: -Xmx1g -Xms1g
+          image: docker.elastic.co/logstash/logstash:7.5.0
+          imagePullPolicy: IfNotPresent
+          name: lsh-mcp-logstash
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1536Mi
+            requests:
+              cpu: 100m
+              memory: 500Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /usr/share/logstash/config/logstash.yml
+              name: logstashconfig
+              subPath: logstash.yml
+            - mountPath: /usr/share/logstash/pipeline
+              name: logstashpipeline
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      terminationGracePeriodSeconds: 120
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: lsh-mcp-logstash-lsh-mcp-logstash-config
+          name: logstashconfig
+        - configMap:
+            defaultMode: 420
+            name: lsh-mcp-logstash-lsh-mcp-logstash-pipeline
+          name: logstashpipeline
+  updateStrategy:
+    type: RollingUpdate

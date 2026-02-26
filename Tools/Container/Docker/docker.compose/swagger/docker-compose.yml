@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    container_name: swagger-editor
+    restart: always
+    ports:
+      - 18000:8080
+    environment:
+      SWAGGER_FILE: /conf/swagger.json
+    volumes:
+      - ~/workspace/docker/swagger/data:/data
+      - ~/workspace/docker/swagger/conf:/conf

@@ -1,0 +1,56 @@
+apaye@apayedeMacBook-Pro jalova.management.ui % cnpm i
+✔ Installed 34 packages
+✔ Linked 619 latest versions
+[1/1] scripts.install webpack-dev-server@3.11.2 › chokidar@2.1.8 › fsevents@^1.2.7 run "node install.js", root: "/Users/apaye/workspace/git/java/jalova/jalova-management/jalova.management.ui/node_modules/_fsevents@1.2.13@fsevents"
+  SOLINK_MODULE(target) Release/.node
+  CXX(target) Release/obj.target/fse/fsevents.o
+  SOLINK_MODULE(target) Release/fse.node
+[1/1] scripts.install webpack-dev-server@3.11.2 › chokidar@2.1.8 › fsevents@^1.2.7 finished in 8s
+✔ Run 1 scripts
+peerDependencies WARNING friendly-errors-webpack-plugin@^1.7.0 requires a peer of webpack@^2.0.0 || ^3.0.0 || ^4.0.0 but webpack@5.73.0 was installed
+peerDependencies WARNING html-webpack-plugin@^3.2.0 requires a peer of webpack@^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0 but webpack@5.73.0 was installed
+peerDependencies WARNING webpack-manifest-plugin@2.1.1 requires a peer of webpack@2 || 3 || 4 but webpack@5.73.0 was installed
+peerDependencies WARNING react-virtualized@^9.21.2 requires a peer of react@^15.3.0 || ^16.0.0-alpha but react@18.1.0 was installed
+peerDependencies WARNING react-router@5.3.3 › mini-create-react-context@^0.4.0 requires a peer of react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 but react@18.1.0 was installed
+peerDependencies WARNING @craco/craco@^5.6.4 requires a peer of react-scripts@* but none was installed
+peerDependencies WARNING react-virtualized@^9.21.2 requires a peer of react-dom@^15.3.0 || ^16.0.0-alpha but react-dom@18.1.0 was installed
+deprecate loadash@^1.0.0 Package is unsupport. Please use the lodash package instead.
+deprecate html-webpack-plugin@^3.2.0 3.x is no longer supported
+deprecate axios@^0.19.2 Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
+deprecate copy-webpack-plugin@5.1.2 › webpack-log@2.0.0 › uuid@^3.3.2 Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+deprecate webpack-dev-server@3.11.2 › chokidar@^2.1.8 Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+deprecate webpack-dev-server@3.11.2 › url@0.11.0 › querystring@0.2.0 The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+deprecate webpack-dev-server@3.11.2 › chokidar@2.1.8 › fsevents@^1.2.7 fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+deprecate webpack-dev-server@3.11.2 › chokidar@2.1.8 › braces@2.3.2 › snapdragon@0.8.2 › source-map-resolve@^0.5.0 See https://github.com/lydell/source-map-resolve#deprecated
+deprecate webpack-dev-server@3.11.2 › chokidar@2.1.8 › braces@2.3.2 › snapdragon@0.8.2 › source-map-resolve@0.5.3 › source-map-url@^0.4.0 See https://github.com/lydell/source-map-url#deprecated
+deprecate webpack-dev-server@3.11.2 › chokidar@2.1.8 › braces@2.3.2 › snapdragon@0.8.2 › source-map-resolve@0.5.3 › urix@^0.1.0 Please see https://github.com/lydell/urix#deprecated
+deprecate webpack-dev-server@3.11.2 › chokidar@2.1.8 › braces@2.3.2 › snapdragon@0.8.2 › source-map-resolve@0.5.3 › resolve-url@^0.2.1 https://github.com/lydell/resolve-url#deprecated
+✔ All packages installed (714 packages installed from npm registry, used 1m(network 54s), speed 121.94KB/s, json 619(6.37MB), tarball 0B)
+apaye@apayedeMacBook-Pro jalova.management.ui %
+
+apaye@apayedeMacBook-Pro jalova.management.ui % cnpm i
+✔ Installed 34 packages
+✔ Linked 688 latest versions
+[1/1] scripts.install webpack-dev-server@2.9.7 › chokidar@1.7.0 › fsevents@^1.0.0 run "node install.js", root: "/Users/apaye/workspace/git/java/jalova/jalova-management/jalova.management.ui/node_modules/_fsevents@1.2.13@fsevents"
+  SOLINK_MODULE(target) Release/.node  CXX(target) Release/obj.target/fse/fsevents.o
+  SOLINK_MODULE(target) Release/fse.node
+[1/1] scripts.install webpack-dev-server@2.9.7 › chokidar@1.7.0 › fsevents@^1.0.0 finished in 6s
+✔ Run 1 scripts
+peerDependencies WARNING webpack-dev-server@2.9.7 requires a peer of webpack@^2.2.0 || ^3.0.0 but webpack@4.46.0 was installed
+peerDependencies WARNING ts-loader@^9.3.0 requires a peer of webpack@^5.0.0 but webpack@4.46.0 was installed
+peerDependencies WARNING react-virtualized@^9.21.2 requires a peer of react@^15.3.0 || ^16.0.0-alpha but react@18.1.0 was installedpeerDependencies WARNING style-loader@^3.3.1 requires a peer of webpack@^5.0.0 but webpack@4.46.0 was installed
+peerDependencies WARNING react-router@5.3.3 › mini-create-react-context@^0.4.0 requires a peer of react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 but react@18.1.0 was installed
+peerDependencies WARNING webpack-dev-server@2.9.7 › webpack-dev-middleware@^1.11.0 requires a peer of webpack@^1.0.0 || ^2.0.0 || ^3.0.0 but webpack@4.46.0was installed
+peerDependencies WARNING @craco/craco@^5.6.4 requires a peer of react-scripts@* but none was installedpeerDependencies WARNING react-virtualized@^9.21.2 requires a peer of react-dom@^15.3.0 || ^16.0.0-alpha but react-dom@18.1.0 was installed
+deprecate loadash@^1.0.0 Package is unsupport. Please use the lodash package instead.deprecate html-webpack-plugin@^3.2.0 3.x is no longer supported
+deprecate axios@^0.19.2 Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410deprecate copy-webpack-plugin@5.1.2 › webpack-log@2.0.0 › uuid@^3.3.2 Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.deprecate webpack-dev-server@2.9.7 › chokidar@^1.6.0 Chokidar 2 will break on node v14+. Upgrade to chokidar 3 with 15x less dependencies.
+deprecate webpack-dev-server@2.9.7 › chokidar@1.7.0 › fsevents@^1.0.0 fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+deprecate webpack-cli@3.3.12 › findup-sync@3.0.0 › micromatch@3.1.10 › snapdragon@0.8.2 › source-map-resolve@^0.5.0 See https://github.com/lydell/source-map-resolve#deprecated
+deprecate webpack-cli@3.3.12 › findup-sync@3.0.0 › micromatch@3.1.10 › snapdragon@0.8.2 › source-map-resolve@0.5.3 › source-map-url@^0.4.0 See https://github.com/lydell/source-map-url#deprecated
+deprecate webpack-cli@3.3.12 › findup-sync@3.0.0 › micromatch@3.1.10 › snapdragon@0.8.2 › source-map-resolve@0.5.3 › urix@^0.1.0 Please see https://github.com/lydell/urix#deprecated
+deprecate webpack-dev-server@2.9.7 › sockjs@0.3.18 › uuid@^2.0.2 Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+deprecate webpack-cli@3.3.12 › findup-sync@3.0.0 › micromatch@3.1.10 › snapdragon@0.8.2 › source-map-resolve@0.5.3 › resolve-url@^0.2.1 https://github.com/lydell/resolve-url#deprecated
+deprecate webpack@4.46.0 › watchpack@1.7.5 › watchpack-chokidar2@2.0.1 › chokidar@^2.1.8 Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+deprecate webpack@4.46.0 › node-libs-browser@2.2.1 › url@0.11.0 › querystring@0.2.0 The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+✔ All packages installed (819 packages installed from npm registry, used 59s(network 53s), speed 125.8KB/s, json 688(5.84MB), tarball 639.67KB)
+apaye@apayedeMacBook-Pro jalova.management.ui %

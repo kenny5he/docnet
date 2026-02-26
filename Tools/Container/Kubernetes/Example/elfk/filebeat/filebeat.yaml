@@ -1,0 +1,118 @@
+apiVersion: extensions/v1
+kind: DaemonSet
+metadata:
+  generation: 1
+  labels:
+    app: lsh-mcp-filebeat-lsh-mcp-filebeat
+    chart: lsh-mcp-filebeat-7.5.0
+    heritage: Tiller
+    release: lsh-mcp-filebeat
+  name: lsh-mcp-filebeat
+  namespace: default
+  resourceVersion: "10275"
+  selfLink: /apis/extensions/v1beta1/namespaces/default/daemonsets/lsh-mcp-filebeat
+  uid: 78427beb-d2f4-40e0-ad9c-acfb943e0d2a
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: lsh-mcp-filebeat-lsh-mcp-filebeat
+  template:
+    metadata:
+      annotations:
+        configChecksum: 2f66a41b31553cfe7a7e89de6648f4208a638e11dc101b89295807fdd7123ad
+      creationTimestamp: null
+      labels:
+        app: lsh-mcp-filebeat-lsh-mcp-filebeat
+        chart: lsh-mcp-filebeat-7.5.0
+        heritage: Tiller
+        release: lsh-cluster-csm-log-agent
+      name: lsh-mcp-filebeat-lsh-mcp-filebeat
+    spec:
+      containers:
+        - args:
+            - -e
+            - -E
+            - http.enabled=true
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+          image: docker.elastic.co/beats/filebeat:7.5.0
+          imagePullPolicy: Always
+          name: lsh-mcp-filebeat
+          resources:
+            limits:
+              cpu: "1"
+              memory: 400Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          securityContext:
+            privileged: false
+            runAsUser: 0
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /usr/share/filebeat/filebeat.yml
+              name: filebeat-config
+              readOnly: true
+              subPath: filebeat.yml
+            - mountPath: /usr/share/filebeat/config
+              name: filebeat-reload-config
+            - mountPath: /usr/share/filebeat/data
+              name: data
+            - mountPath: /var/lib/docker/containers
+              name: varlibdockercontainers
+              readOnly: true
+            - mountPath: /data/docker/containers
+              name: data-docker-containers
+            - mountPath: /var/log
+              name: varlog
+              readOnly: true
+            - mountPath: /var/run/docker.sock
+              name: varrundockersock
+              readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: lsh-mcp-filebeat-lsh-mcp-filebeat
+      serviceAccountName: lsh-mcp-filebeat-lsh-mcp-filebeat
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 384
+            name: lsh-mcp-filebeat-config
+          name: filebeat-config
+        - configMap:
+            defaultMode: 420
+            name: lsh-mcp-filebeat-reload-config
+          name: filebeat-reload-config
+        - hostPath:
+            path: /var/lib/lsh-mcp-filebeat-lsh-mcp-filebeat-default-data
+            type: DirectoryOrCreate
+          name: data
+        - hostPath:
+            path: /var/lib/docker/containers
+            type: ""
+          name: varlibdockercontainers
+        - hostPath:
+            path: /var/log
+            type: ""
+          name: varlog
+        - hostPath:
+            path: /data/docker/containers
+            type: ""
+          name: data-docker-containers
+        - hostPath:
+            path: /var/run/docker.sock
+            type: ""
+          name: varrundockersock

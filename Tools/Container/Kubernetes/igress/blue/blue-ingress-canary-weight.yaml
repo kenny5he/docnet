@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: canary-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # 启用Canary
+    nginx.ingress.kubernetes.io/canary: "true"
+    # 60% 流量均转发到Canary Ingress
+    nginx.ingress.kubernetes.io/canary-weight: "60"
+    kubernetes.io/elb.port: '80'
+spec:
+  rules:
+    - host: gray.microfoolish.com
+      http:
+        paths:
+          - path: '/'
+            backend:
+              serviceName: new
+              servicePort: 80

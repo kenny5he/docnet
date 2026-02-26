@@ -7,7 +7,8 @@ lsusb -tv 列出所有USB设备
 lsmod 列出加载的内核模块 
 env 查看环境变量资源 
 free -m 查看内存使用量和交换区使用量 
-df -h 查看各分区使用情况 
+df -h 查看各分区使用情况
+du -h --max-depth=1 /home 查看home目录中文件、文件夹大小
 du -sh <目录名> 查看指定目录的大小 
 grep MemTotal /proc/meminfo 查看内存总量 
 grep MemFree /proc/meminfo 查看空闲内存量 

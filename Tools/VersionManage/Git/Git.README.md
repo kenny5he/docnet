@@ -1,12 +1,10 @@
 ####GIT 使用文档
-[Demo](https://github.com/heyekun54/webdemo.git)
-[参考博客](http://www.2cto.com/kf/201610/554757.html)
 1. 配置本地ssh key
     ```
         ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
     ```
     1. 单ssh (Enter确定 输入密码  确认密码)(公钥默认位置在当前用户下.ssh文件夹下/id_rsa.pub文件)
-    2. 多个ssh
+    2. [多个ssh](https://blog.csdn.net/weixin_42257984/article/details/124788134)
         1. 配置多个ssh (注意第一次回车之后需要为生成的密钥自定义名字，输入一个 /Users/apaye/.ssh/id_rsa_github_qq，输入完之后一路回车)
             - /Users/apaye/.ssh/id_rsa_github_qq
             - /Users/apaye/.ssh/id_rsa_gitee_163
@@ -36,9 +34,13 @@
                 ```
 2. 配置帐号信息
     ``` 
+    
+   // 配置本地默认分支名(git)
+   git config --global init.defaultBranch main
+   
     git config --global user.name "kenny"
     git config --global user.email "yekun_he@163.com"
-    
+   
     git config --global user.name "kenny5he"
     git config --global user.email "923662064@qq.com"
    
@@ -56,8 +58,11 @@
 
 4. 本地仓库与远程仓库关联
     ``` 
+   // 重命名本地分支
+   git branch -m main master
+   
    git branch --set-upstream=origin/master master 
-    ```
+   ```
 
 5. 拉取远程仓库代码
     ``` 
@@ -104,12 +109,19 @@
         ```shell script
              git push origin master
         ```
-8. 提交上传
+8. 切换分支
+    ```
+     -- (无)本地不存在新分支
+     git checkout -b r180-comment origin/r180-comment
+     -- (有)本地存在分支
+     git checkout dev
+    ```
+9. 提交上传
     1. git add .
     2. git commit -m "[storyid/bugid] remark"(提交单个文件，例：git commit -m "remark" filename)
     3. git push (当含有多个分支时，须指定分支，例：git push origin master)
 
-9. 解决冲突
+10. 解决冲突
     1. git stash (缓存已修改的文件)
         1. git pull (更新文件)
         2. git stash pop(弹出最近一次缓存好的文件)
@@ -123,14 +135,14 @@
        git merge
     4. git diff  (找到冲突的地方，然后解决冲突)(然后再上传)
   
-10. 删除文件
+11. 删除文件
      1. git rm xxxx.java (移除文件)
      2. git rm -cached xxxx.java (缓存区删除文件,保留文件在当前目录，不再跟踪)
-11. 删除远端分支
+12. 删除远端分支
     ```
         git push origin --delete 5.2.x-Comment
     ```
-12. 查看日志
+13. 查看日志
     1. git log  (按提交时间列出所有的更新)
     2. git log -p -2 (显示最近两次提交的内容差异)
     3. git log 的常用选项
@@ -155,14 +167,14 @@
     |--pretty         |使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）。|
 
 
-12. idea解决冲突
-    1. 
-    参考博客[git在idea中的冲突解决](https://www.cnblogs.com/newAndHui/p/10851807.html)
+14. idea解决冲突
+    1. 参考博客[git在idea中的冲突解决](https://www.cnblogs.com/newAndHui/p/10851807.html)
 
-13. github fork pull
+15. github fork pull
     https://github.com/selfteaching/the-craft-of-selfteaching/issues/67
-/*:
-密钥：
+
+16. 密钥：
+```
 The key fingerprint is:
 b3:73:ae:f6:c7:b0:a1:07:fe:85:cc:10:99:e5:cd:f2 923662064@qq.com
 The key's randomart image is:
@@ -177,4 +189,4 @@ The key's randomart image is:
 |        ++o.o    |
 |       ..=+.     |
 +-----------------+
-*/
+```

@@ -1,0 +1,43 @@
+apiVersion: v1
+# 副本控制器RC
+kind: ReplicationController
+metadata:
+  # RC的名称(全局唯一)
+  name: mysql-rc
+  # 标签
+  labels:
+    name: mysql-rc
+spec:
+  # 副本期待数量
+  replicas: 1
+  selector:
+    # 符合目标的Pod拥有此标签(mysql-pod)始终只运行一个副本
+    name: mysql-pod
+  # 根据此模板创建Pod的实例
+  template:
+    metadata:
+      labels:
+        # Pod副本拥有的标签，对应RC的Selector
+        name: mysql-pod
+    spec:
+      # 容器定义部分
+      containers:
+        - name: mysql
+          image: mysql
+          imagePullPolicy: IfNotPresent
+          ports:
+          # 容器暴露的端口
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "dmt.123"
+          resources:
+            # 资源最小申请量，系统必须满足要求
+            requests:
+              memory: "128Mi"
+              # 200m 等于 0.2 个CPU，绝对值，不能设定相对值10%
+              cpu: "200m"
+            # 资源最大允许使用量
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
