@@ -1,0 +1,7 @@
+{
+    "registry-mirrors": [
+        "http://hub-mirror.c.163.com",
+        "http://registry.docker-cn.com"
+    ],
+    "insecure-registries": []
+}
