@@ -1,5 +1,15 @@
 ## Mysql 数据分组
 ### Group By
+```sql
+select 
+    count(0) as `count`,
+    invoice_number,
+    invoice_code,
+    doc_type
+from t_etp_group_relation
+where (invoice_number, doc_type) in (('1347684543','pdf'),('77353189832431', 'pdf'))
+group by invoice_number
+```
 
 ### Partition
 1. 根据 Category 分组，并根据价格排序
