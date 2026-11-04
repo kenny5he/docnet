@@ -42,3 +42,6 @@ lin_reg.fit(X, y)
 
 print(lin_reg.intercept_, lin_reg.coef_)
 ```
+
+### 致谢/引用/参考
+ - 腾讯云笔记: https://cloud.tencent.com/developer/article/2087141
